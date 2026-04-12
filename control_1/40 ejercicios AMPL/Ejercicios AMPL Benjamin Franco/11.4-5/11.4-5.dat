@@ -1,0 +1,15 @@
+set FABRICAS := Fabrica1 Fabrica2;
+set CLIENTES := Cliente1 Cliente2 Cliente3;
+
+param costo_envio: Cliente1 Cliente2 Cliente3 :=
+    Fabrica1    600      800      700
+    Fabrica2    400      900      600;
+
+param produccion_fabrica :=
+    Fabrica1    400
+    Fabrica2    500;
+
+param demanda_cliente :=
+    Cliente1    300
+    Cliente2    200
+    Cliente3    400;

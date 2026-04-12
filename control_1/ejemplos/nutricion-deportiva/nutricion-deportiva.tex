@@ -1,0 +1,411 @@
+\documentclass[12pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[spanish]{babel}
+\usepackage{amsmath, amssymb}
+\usepackage{booktabs}
+\usepackage{geometry}
+\usepackage{xcolor}
+\usepackage{mdframed}
+\usepackage{enumitem}
+\usepackage{array}
+\geometry{margin=2.5cm}
+
+% Cajas de color para conceptos clave
+\newmdenv[
+  backgroundcolor=blue!8,
+  linecolor=blue!40,
+  linewidth=1.5pt,
+  innertopmargin=8pt,
+  innerbottommargin=8pt,
+  innerleftmargin=10pt,
+  innerrightmargin=10pt
+]{cajazul}
+
+\newmdenv[
+  backgroundcolor=orange!10,
+  linecolor=orange!50,
+  linewidth=1.5pt,
+  innertopmargin=8pt,
+  innerbottommargin=8pt,
+  innerleftmargin=10pt,
+  innerrightmargin=10pt
+]{cajanota}
+
+\newmdenv[
+  backgroundcolor=green!8,
+  linecolor=green!50,
+  linewidth=1.5pt,
+  innertopmargin=8pt,
+  innerbottommargin=8pt,
+  innerleftmargin=10pt,
+  innerrightmargin=10pt
+]{cajaverde}
+
+\newmdenv[
+  backgroundcolor=red!8,
+  linecolor=red!40,
+  linewidth=1.5pt,
+  innertopmargin=8pt,
+  innerbottommargin=8pt,
+  innerleftmargin=10pt,
+  innerrightmargin=10pt
+]{cajaroja}
+
+\newmdenv[
+  backgroundcolor=violet!8,
+  linecolor=violet!40,
+  linewidth=1.5pt,
+  innertopmargin=8pt,
+  innerbottommargin=8pt,
+  innerleftmargin=10pt,
+  innerrightmargin=10pt
+]{cajavioleta}
+
+\title{\textbf{Ejercicio de Pr\'actica --- PLEM} \\[0.5em]
+\large Problema de Nutrici\'on Deportiva \\[0.3em]
+\normalsize (Mismo patr\'on que el Problema 2.10 --- Dieta)}
+\author{}
+\date{}
+
+\begin{document}
+\maketitle
+\tableofcontents
+\newpage
+
+%% =====================================================================
+\section{Enunciado del Problema}
+%% =====================================================================
+
+Un deportista de alto rendimiento necesita dise\~nar su plan de alimentaci\'on diario para la fase de entrenamiento previo a una competencia. Su nutricionista le ha indicado los requerimientos m\'inimos diarios que debe cumplir:
+
+\begin{table}[h]
+\centering
+\begin{tabular}{lc}
+\toprule
+\textbf{Nutriente} & \textbf{Requerimiento m\'inimo diario} \\
+\midrule
+Prote\'ina (g/d\'ia)      & 50   \\
+Carbohidratos (g/d\'ia)   & 250  \\
+Grasas saludables (g/d\'ia) & 45 \\
+Calcio (mg/d\'ia)          & 800  \\
+Potasio (mg/d\'ia)         & 2\,500 \\
+\bottomrule
+\end{tabular}
+\caption{Requerimientos nutricionales m\'inimos diarios del deportista.}
+\end{table}
+
+Teniendo en cuenta el costo, el deportista desea elaborar su plan de alimentaci\'on con los alimentos m\'as econ\'omicos. Los alimentos disponibles y sus unidades de medida son: avena [1 taza] (Av), leche descremada [1 vaso] (LD), huevo duro [1 unidad] (HD), aceite de oliva [1 cucharada] (AO), banana [1 unidad] (Ba), y barra prote\'ica [1 unidad] (BP).
+
+El aporte nutricional de cada alimento por porci\'on es:
+
+\begin{table}[h]
+\centering
+\begin{tabular}{l *{6}{r}}
+\toprule
+& \textbf{Av} & \textbf{LD} & \textbf{HD} & \textbf{AO}
+& \textbf{Ba} & \textbf{BP} \\
+\midrule
+Prote\'ina (g)           & 5    & 8     & 6    & 0    & 1    & 20   \\
+Carbohidratos (g)        & 27   & 12    & 0,5  & 0    & 27   & 25   \\
+Grasas saludables (g)    & 3    & 0,5   & 5    & 14   & 0,3  & 8    \\
+Calcio (mg)              & 20   & 300   & 25   & 0    & 5    & 150  \\
+Potasio (mg)             & 150  & 350   & 65   & 0    & 420  & 200  \\
+\midrule
+\textbf{Costo (COP/porci\'on)} & 300 & 500 & 400 & 350 & 600 & 3\,500 \\
+\bottomrule
+\end{tabular}
+\caption{Aporte nutricional y costo de cada alimento por porci\'on.}
+\end{table}
+
+\textbf{Determine} la cantidad de alimentos a consumir diariamente para cumplir con los requerimientos nutricionales al m\'inimo costo.
+
+\newpage
+
+%% =====================================================================
+\section{Gu\'ia para Modelar: Preguntas que debes hacerte}
+%% =====================================================================
+
+Antes de ver la soluci\'on, intenta modelar el problema t\'u mismo. Usa estas preguntas como gu\'ia:
+
+\begin{enumerate}[label=\textbf{P\arabic*.}]
+    \item \textbf{Conjuntos:} \textquestiondown Cu\'ales son las dimensiones del problema? \textquestiondown Qu\'e cosas necesitas indexar?
+
+    \item \textbf{Separaci\'on continuo/discreto:} Mira las unidades de medida. \textquestiondown Cu\'ales alimentos se pueden medir en fracciones y cu\'ales se compran por unidad entera? Esto define los conjuntos $I$ y $A$.
+
+    \item \textbf{Par\'ametros:} \textquestiondown Cu\'ales son los datos conocidos? Identifica $c_i$, $a_{ij}$, y $d_j$.
+
+    \item \textbf{Variables:} \textquestiondown Cu\'antas variables hay? \textquestiondown Cu\'ales son $x_i$ (continuas) y cu\'ales son $y_i$ (enteras)?
+
+    \item \textbf{Funci\'on objetivo:} \textquestiondown Qu\'e minimizas/maximizas? \textquestiondown C\'omo se escribe con dos sumatorias?
+
+    \item \textbf{Restricciones:} \textquestiondown Cu\'antas restricciones genera el $\forall\, j \in J$? \textquestiondown Son $\leq$ o $\geq$?
+
+    \item \textbf{Dominio:} \textquestiondown Qu\'e tipo de problema es: PL, PLE, o PLEM?
+\end{enumerate}
+
+\begin{cajavioleta}
+\textbf{Detente aqu\'i.} Intenta escribir el modelo completo (extendido y algebraico) en tu cuaderno antes de pasar a la siguiente p\'agina. La \'unica forma de aprender a modelar es \textit{hacerlo}, no leerlo.
+\end{cajavioleta}
+
+\newpage
+
+%% =====================================================================
+\section{Soluci\'on Paso a Paso}
+%% =====================================================================
+
+\subsection{Paso 1 --- Conjuntos}
+
+Analicemos las unidades de medida de cada alimento:
+
+\begin{itemize}
+    \item \textbf{Avena} (1 taza): puedes preparar 2,3 tazas de avena $\Rightarrow$ \textbf{continua}
+    \item \textbf{Leche descremada} (1 vaso): puedes tomar 1,5 vasos $\Rightarrow$ \textbf{continua}
+    \item \textbf{Aceite de oliva} (1 cucharada): puedes usar 0,7 cucharadas $\Rightarrow$ \textbf{continua}
+    \item \textbf{Huevo duro} (1 unidad): no puedes comprar 0,4 huevos $\Rightarrow$ \textbf{discreto}
+    \item \textbf{Banana} (1 unidad): no puedes comprar 1,3 bananas $\Rightarrow$ \textbf{discreto}
+    \item \textbf{Barra prote\'ica} (1 unidad): no puedes comprar 0,5 barras $\Rightarrow$ \textbf{discreto}
+\end{itemize}
+
+\begin{cajazul}
+\textbf{Conjuntos resultantes:}
+\begin{align*}
+    I &= \{1, 2, 4\} \quad \text{(alimentos continuos: avena, leche, aceite de oliva)} \\
+    A &= \{3, 5, 6\} \quad \text{(alimentos discretos: huevo, banana, barra prote\'ica)} \\
+    J &= \{1, 2, 3, 4, 5\} \quad \text{(nutrientes: prote\'ina, carbohidratos, grasas, calcio, potasio)}
+\end{align*}
+\end{cajazul}
+
+\begin{cajanota}
+\textbf{Verifica:} $|I| = 3$ (continuos), $|A| = 3$ (discretos), $|I \cup A| = 6$ (total alimentos), $|J| = 5$ (nutrientes). Los n\'umeros de $I$ y $A$ \textbf{no son consecutivos}: $I = \{1,2,4\}$, no $\{1,2,3\}$. Cada n\'umero preserva la posici\'on original del alimento en la tabla.
+\end{cajanota}
+
+\subsection{Paso 2 --- Par\'ametros}
+
+\begin{itemize}
+    \item $c_i$: costo del alimento $i \in I \cup A$.
+    \item $a_{ij}$: aporte del nutriente $j \in J$ por porci\'on del alimento $i \in I \cup A$.
+    \item $d_j$: requerimiento m\'inimo del nutriente $j \in J$.
+\end{itemize}
+
+Ejemplo: $a_{3,1} = 6$ significa que 1 porci\'on del alimento 3 (huevo duro) aporta 6~g del nutriente 1 (prote\'ina).
+
+\subsection{Paso 3 --- Variables de decisi\'on}
+
+\begin{cajazul}
+\begin{itemize}
+    \item $x_i$: cantidad de porciones diarias del alimento $i \in I$ (continua).
+    \item $y_i$: cantidad de porciones diarias del alimento $i \in A$ (entera).
+\end{itemize}
+
+Expl\'icitamente:
+\begin{itemize}
+    \item $x_1$ = tazas de avena (continua)
+    \item $x_2$ = vasos de leche descremada (continua)
+    \item $x_4$ = cucharadas de aceite de oliva (continua)
+    \item $y_3$ = huevos duros (entera)
+    \item $y_5$ = bananas (entera)
+    \item $y_6$ = barras prote\'icas (entera)
+\end{itemize}
+\end{cajazul}
+
+Total: \textbf{3 variables continuas + 3 variables enteras = 6 variables}.
+
+\subsection{Paso 4 --- Funci\'on Objetivo}
+
+Minimizar el costo diario total:
+
+\[
+    \text{Min}\; z = \underbrace{300\,x_1 + 500\,x_2 + 350\,x_4}_{\sum_{i \in I} c_i \cdot x_i}
+    \;+\; \underbrace{400\,y_3 + 600\,y_5 + 3\,500\,y_6}_{\sum_{i \in A} c_i \cdot y_i}
+\]
+
+\subsection{Paso 5 --- Restricciones nutricionales}
+
+\textit{Prote\'ina} ($j = 1$, $\geq 50$ g):
+\[
+    5\,x_1 + 8\,x_2 + 0\,x_4 + 6\,y_3 + 1\,y_5 + 20\,y_6 \geq 50
+\]
+
+\textit{Carbohidratos} ($j = 2$, $\geq 250$ g):
+\[
+    27\,x_1 + 12\,x_2 + 0\,x_4 + 0{,}5\,y_3 + 27\,y_5 + 25\,y_6 \geq 250
+\]
+
+\textit{Grasas saludables} ($j = 3$, $\geq 45$ g):
+\[
+    3\,x_1 + 0{,}5\,x_2 + 14\,x_4 + 5\,y_3 + 0{,}3\,y_5 + 8\,y_6 \geq 45
+\]
+
+\textit{Calcio} ($j = 4$, $\geq 800$ mg):
+\[
+    20\,x_1 + 300\,x_2 + 0\,x_4 + 25\,y_3 + 5\,y_5 + 150\,y_6 \geq 800
+\]
+
+\textit{Potasio} ($j = 5$, $\geq 2\,500$ mg):
+\[
+    150\,x_1 + 350\,x_2 + 0\,x_4 + 65\,y_3 + 420\,y_5 + 200\,y_6 \geq 2\,500
+\]
+
+\subsection{Paso 6 --- Dominio}
+
+\begin{align*}
+    x_i &\in \mathbb{R}^+ \cup \{0\}, \quad \forall\, i \in I = \{1, 2, 4\} \\
+    y_i &\in \mathbb{Z}^+ \cup \{0\}, \quad \forall\, i \in A = \{3, 5, 6\}
+\end{align*}
+
+\textbf{Tipo de problema:} PLEM (Programa Lineal Entero-Mixto) de minimizaci\'on.
+
+%% =====================================================================
+\section{Modelo Extendido Completo}
+%% =====================================================================
+
+\begin{mdframed}[backgroundcolor=gray!5, linewidth=1.5pt]
+\textbf{Funci\'on objetivo:}
+\[
+    \text{Min}\; z = 300\,x_1 + 500\,x_2 + 350\,x_4
+    + 400\,y_3 + 600\,y_5 + 3\,500\,y_6
+\]
+
+\textbf{Sujeto a:}
+\begin{align*}
+    5\,x_1 + 8\,x_2 + 6\,y_3 + y_5 + 20\,y_6 &\geq 50   && \text{(Prote\'ina)} \\
+    27\,x_1 + 12\,x_2 + 0{,}5\,y_3 + 27\,y_5 + 25\,y_6 &\geq 250 && \text{(Carbohidratos)} \\
+    3\,x_1 + 0{,}5\,x_2 + 14\,x_4 + 5\,y_3 + 0{,}3\,y_5 + 8\,y_6 &\geq 45  && \text{(Grasas)} \\
+    20\,x_1 + 300\,x_2 + 25\,y_3 + 5\,y_5 + 150\,y_6 &\geq 800  && \text{(Calcio)} \\
+    150\,x_1 + 350\,x_2 + 65\,y_3 + 420\,y_5 + 200\,y_6 &\geq 2\,500 && \text{(Potasio)}
+\end{align*}
+
+\textbf{Dominio:}
+\begin{align*}
+    x_i &\in \mathbb{R}^+ \cup \{0\}, \quad \forall\, i \in \{1, 2, 4\} \\
+    y_i &\in \mathbb{Z}^+ \cup \{0\}, \quad \forall\, i \in \{3, 5, 6\}
+\end{align*}
+\end{mdframed}
+
+%% =====================================================================
+\section{Modelo Algebraico Completo}
+%% =====================================================================
+
+\begin{mdframed}[backgroundcolor=gray!5, linewidth=1.5pt]
+\textbf{Conjuntos:}
+\begin{itemize}
+    \item $I = \{1, 2, 4\}$ --- alimentos continuos (avena, leche, aceite)
+    \item $A = \{3, 5, 6\}$ --- alimentos discretos (huevo, banana, barra)
+    \item $J = \{1, 2, 3, 4, 5\}$ --- nutrientes
+\end{itemize}
+
+\medskip
+\textbf{Par\'ametros:}
+\begin{itemize}
+    \item $c_i$: costo del alimento $i \in I \cup A$
+    \item $a_{ij}$: aporte del nutriente $j$ por porci\'on del alimento $i$, \; $i \in I \cup A,\; j \in J$
+    \item $d_j$: requerimiento m\'inimo del nutriente $j \in J$
+\end{itemize}
+
+\medskip
+\textbf{Variables:}
+\begin{itemize}
+    \item $x_i \geq 0$: porciones del alimento continuo $i \in I$
+    \item $y_i \geq 0$ entera: porciones del alimento discreto $i \in A$
+\end{itemize}
+
+\bigskip
+\textbf{Modelo:}
+\begin{align}
+    \text{Minimizar}\quad z &= \sum_{i \in I} c_i \cdot x_i + \sum_{i \in A} c_i \cdot y_i \tag{F.O.} \\[10pt]
+    \text{s.a.}\quad \sum_{i \in I} a_{ij} \cdot x_i + \sum_{i \in A} a_{ij} \cdot y_i &\geq d_j, \qquad \forall\, j \in J \tag{R1} \\[10pt]
+    x_i &\in \mathbb{R}^+ \cup \{0\}, \qquad \forall\, i \in I \tag{R2} \\[10pt]
+    y_i &\in \mathbb{Z}^+ \cup \{0\}, \qquad \forall\, i \in A \tag{R3}
+\end{align}
+\end{mdframed}
+
+%% =====================================================================
+\section{Checklist de Autoverificaci\'on}
+%% =====================================================================
+
+Usa esta lista para verificar que tu modelo est\'a correcto:
+
+\begin{enumerate}[label=\checkmark]
+    \item \textbf{Conjuntos:} \textquestiondown Separaste alimentos en $I$ (continuos) y $A$ (discretos)?
+    \item \textbf{Numeraci\'on:} \textquestiondown Los \'indices preservan la posici\'on original? ($I = \{1,2,4\}$, no $\{1,2,3\}$)
+    \item \textbf{Variables:} \textquestiondown Usaste $x_i$ para $I$ e $y_i$ para $A$?
+    \item \textbf{Funci\'on objetivo:} \textquestiondown Es de \textbf{minimizaci\'on}? \textquestiondown Tiene \textbf{dos} sumatorias ($\sum_{i \in I}$ y $\sum_{i \in A}$)?
+    \item \textbf{Restricciones:} \textquestiondown Son $\geq$? \textquestiondown Hay exactamente 5 (una por nutriente)?
+    \item \textbf{Restricciones:} \textquestiondown Cada restricci\'on tambi\'en tiene \textbf{dos} sumatorias?
+    \item \textbf{Dominio:} \textquestiondown $x_i \in \mathbb{R}^+ \cup \{0\}$ y $y_i \in \mathbb{Z}^+ \cup \{0\}$?
+    \item \textbf{Tipo:} \textquestiondown Identificaste que es un \textbf{PLEM}?
+\end{enumerate}
+
+%% =====================================================================
+\section{Errores T\'ipicos para Detectar}
+%% =====================================================================
+
+\begin{cajaroja}
+\textbf{Error 1: No separar los conjuntos.}
+
+Si defines todas las variables como continuas:
+\[
+    x_i \geq 0, \quad \forall\, i \in \{1, 2, 3, 4, 5, 6\}
+\]
+el solver podr\'ia devolver $x_3 = 2{,}7$ (``come 2,7 huevos''). Eso no tiene sentido. Los huevos, bananas y barras deben ser enteros.
+\end{cajaroja}
+
+\begin{cajaroja}
+\textbf{Error 2: Poner restricciones $\leq$ en vez de $\geq$.}
+
+Si escribes:
+\[
+    5\,x_1 + 8\,x_2 + \ldots \leq 50
+\]
+estar\'ias diciendo ``no consumas \textbf{m\'as de} 50~g de prote\'ina''. Pero el problema dice que necesitas \textbf{al menos} 50~g. La direcci\'on importa:
+\begin{itemize}
+    \item Minimizar + cumplir m\'inimos $\Rightarrow$ restricciones $\geq$
+    \item Maximizar + no exceder recursos $\Rightarrow$ restricciones $\leq$
+\end{itemize}
+\end{cajaroja}
+
+\begin{cajaroja}
+\textbf{Error 3: Una sola sumatoria en la funci\'on objetivo.}
+
+Si escribes:
+\[
+    \text{Min}\; z = \sum_{i \in I \cup A} c_i \cdot x_i
+\]
+est\'as usando la misma variable $x_i$ para todos. Pero $x_i$ solo est\'a definida para $i \in I$, y $y_i$ para $i \in A$. Lo correcto es $\sum_{i \in I} c_i x_i + \sum_{i \in A} c_i y_i$.
+\end{cajaroja}
+
+\begin{cajaroja}
+\textbf{Error 4: Olvidar el aceite de oliva en las restricciones.}
+
+El aceite de oliva ($x_4$) aporta 0~g de prote\'ina, 0~g de carbohidratos, 0~mg de calcio y 0~mg de potasio. Solo aporta grasas. Muchos estudiantes lo omiten de las restricciones de prote\'ina. Eso est\'a bien en el modelo extendido (omitir ceros por claridad), pero en el modelo algebraico la sumatoria $\sum_{i \in I}$ lo incluye autom\'aticamente --- el cero simplemente no contribuye.
+\end{cajaroja}
+
+%% =====================================================================
+\section{Comparaci\'on: Dieta vs.\ Nutrici\'on Deportiva}
+%% =====================================================================
+
+\begin{table}[h]
+\centering
+\small
+\begin{tabular}{lll}
+\toprule
+\textbf{Aspecto} & \textbf{Dieta (2.10)} & \textbf{Nutrici\'on deportiva} \\
+\midrule
+Alimentos continuos ($|I|$) & 5 & 3 \\
+Alimentos discretos ($|A|$) & 4 & 3 \\
+Nutrientes ($|J|$) & 8 & 5 \\
+Variables totales & 9 & 6 \\
+Restricciones & 8 & 5 \\
+Tipo & PLEM (Min) & PLEM (Min) \\
+\midrule
+\multicolumn{3}{l}{\textit{La estructura matem\'atica es id\'entica. Solo cambian los datos.}} \\
+\bottomrule
+\end{tabular}
+\caption{Comparaci\'on estructural entre ambos problemas.}
+\end{table}
+
+\begin{cajaverde}
+\textbf{Lecci\'on final.} Si entendiste c\'omo modelar el problema de la dieta, ya sabes modelar este. Y si sabes modelar este, sabes modelar \textbf{cualquier problema con la misma estructura}: mezcla de alimentos para ganado, formulaci\'on de medicamentos, dise\~no de aleaciones met\'alicas, etc. Lo que cambia son los datos; la matem\'atica es la misma.
+\end{cajaverde}
+
+\end{document}

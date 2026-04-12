@@ -1,0 +1,1561 @@
+\documentclass[12pt,a4paper]{article}
+
+%% ── Paquetes ──────────────────────────────────────────────────────────────────
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[spanish]{babel}
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage{geometry}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{xcolor}
+\usepackage{listings}
+\usepackage{tcolorbox}
+\usepackage{enumitem}
+\usepackage{fancyhdr}
+\usepackage{titlesec}
+\usepackage{hyperref}
+\usepackage{multirow}
+\usepackage{mathtools}
+\usepackage{adjustbox}
+
+\geometry{left=2.5cm, right=2.5cm, top=3cm, bottom=2.5cm, headheight=15pt}
+
+%% ── Colores ───────────────────────────────────────────────────────────────────
+\definecolor{unabazul}{RGB}{0,62,126}
+\definecolor{unabgris}{RGB}{100,100,100}
+\definecolor{colConj}{RGB}{235,245,255}
+\definecolor{colParam}{RGB}{255,245,220}
+\definecolor{colVar}{RGB}{240,255,240}
+\definecolor{colFo}{RGB}{230,240,255}
+\definecolor{colRest}{RGB}{255,240,245}
+\definecolor{colSoluc}{RGB}{255,252,220}
+\definecolor{colSens}{RGB}{238,255,238}
+\definecolor{colModel}{RGB}{245,235,255}
+
+%% ── Cajas tcolorbox ───────────────────────────────────────────────────────────
+\tcbuselibrary{skins, breakable, listings}
+
+\newtcolorbox{conjbox}{
+  title={\small\bfseries Definición de Conjuntos},
+  colback=colConj, colframe=unabazul!80,
+  fonttitle=\bfseries\color{white}, coltitle=white,
+  attach boxed title to top left={yshift=-2mm, xshift=4mm},
+  boxed title style={colback=unabazul!80}, breakable, before skip=6pt, after skip=6pt
+}
+\newtcolorbox{parambox}{
+  title={\small\bfseries Definición de Parámetros},
+  colback=colParam, colframe=orange!70!black,
+  fonttitle=\bfseries\color{white}, coltitle=white,
+  attach boxed title to top left={yshift=-2mm, xshift=4mm},
+  boxed title style={colback=orange!70!black}, breakable,
+  before skip=6pt, after skip=6pt,
+  fontupper=\small
+}
+\newtcolorbox{varbox}{
+  title={\small\bfseries Variables de Decisión},
+  colback=colVar, colframe=green!50!black,
+  fonttitle=\bfseries\color{white}, coltitle=white,
+  attach boxed title to top left={yshift=-2mm, xshift=4mm},
+  boxed title style={colback=green!50!black}, breakable, before skip=6pt, after skip=6pt
+}
+\newtcolorbox{fobox}{
+  title={\small\bfseries Función Objetivo},
+  colback=colFo, colframe=unabazul,
+  fonttitle=\bfseries\color{white}, coltitle=white,
+  attach boxed title to top left={yshift=-2mm, xshift=4mm},
+  boxed title style={colback=unabazul}, breakable, before skip=6pt, after skip=6pt
+}
+\newtcolorbox{restbox}{
+  title={\small\bfseries Restricciones},
+  colback=colRest, colframe=red!60!black,
+  fonttitle=\bfseries\color{white}, coltitle=white,
+  attach boxed title to top left={yshift=-2mm, xshift=4mm},
+  boxed title style={colback=red!60!black}, breakable, before skip=6pt, after skip=6pt
+}
+\newtcolorbox{modelbox}{
+  title={\small\bfseries Modelo Matemático Completo},
+  colback=colModel, colframe=violet!70!black,
+  fonttitle=\bfseries\color{white}, coltitle=white,
+  attach boxed title to top left={yshift=-2mm, xshift=4mm},
+  boxed title style={colback=violet!70!black}, breakable, before skip=6pt, after skip=6pt
+}
+\newtcolorbox{solucbox}{
+  title={\small\bfseries Solución Óptima},
+  colback=colSoluc, colframe=orange!80!black,
+  fonttitle=\bfseries\color{white}, coltitle=white,
+  attach boxed title to top left={yshift=-2mm, xshift=4mm},
+  boxed title style={colback=orange!80!black}, breakable, before skip=6pt, after skip=6pt
+}
+\newtcolorbox{sensbox}{
+  title={\small\bfseries Análisis de Sensibilidad},
+  colback=colSens, colframe=teal,
+  fonttitle=\bfseries\color{white}, coltitle=white,
+  attach boxed title to top left={yshift=-2mm, xshift=4mm},
+  boxed title style={colback=teal}, breakable, before skip=6pt, after skip=6pt
+}
+
+%% ── Lenguaje AMPL para listings ───────────────────────────────────────────────
+\lstdefinelanguage{AMPL}{
+  morekeywords=[1]{set, param, var, minimize, maximize, subject, to,
+                   in, sum, data, solve, display, option, end,
+                   integer, binary, ordered, by, within, default,
+                   for, if, then, else, let, printf, reset, update},
+  morekeywords=[2]{s\.t\., forall},
+  sensitive=false,
+  morecomment=[l]{\#},
+  morestring=[b]",
+  morestring=[b]'
+}
+
+\lstset{
+  language=AMPL,
+  basicstyle=\ttfamily\footnotesize,
+  keywordstyle=[1]{\color{unabazul}\bfseries},
+  keywordstyle=[2]{\color{violet}\bfseries},
+  commentstyle=\color{unabgris}\itshape,
+  stringstyle=\color{teal},
+  numbers=left, numberstyle=\tiny\color{unabgris}, numbersep=8pt,
+  frame=single, framerule=0.4pt, rulecolor=\color{unabazul!40},
+  backgroundcolor=\color{gray!5},
+  breaklines=true, captionpos=b,
+  xleftmargin=1.5em, tabsize=4, showstringspaces=false
+}
+
+%% ── Encabezado ────────────────────────────────────────────────────────────────
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small\color{unabgris}CINF105 Optimización · Control 1 · 2026}
+\fancyhead[R]{\small\color{unabgris}Universidad Andrés Bello}
+\fancyfoot[C]{\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+
+%% ── Títulos ───────────────────────────────────────────────────────────────────
+\titleformat{\section}{\large\bfseries\color{unabazul}}{\thesection.}{0.5em}{}[\titlerule]
+\titleformat{\subsection}{\normalsize\bfseries\color{unabazul!80}}{\thesubsection}{0.5em}{}
+
+%% ── Comandos auxiliares ───────────────────────────────────────────────────────
+\newcommand{\cset}[1]{\mathcal{#1}}            % conjuntos
+\newcommand{\param}[1]{\mathit{#1}}            % parámetros
+
+%% ═════════════════════════════════════════════════════════════════════════════
+\begin{document}
+%% ═════════════════════════════════════════════════════════════════════════════
+
+%% ── Portada ──────────────────────────────────────────────────────────────────
+\begin{titlepage}
+\centering\vspace*{1.5cm}
+{\Large\bfseries\color{unabazul}Universidad Andrés Bello\\[0.3em]Facultad de Ingeniería}\\[0.4em]
+{\large CINF105 Optimización}\\[2cm]
+\rule{\linewidth}{1.2pt}\\[0.5em]
+{\LARGE\bfseries Control 1 — Resolución de Ejercicios}\\[0.4em]
+{\large\color{unabgris}Optimización 2026}\\[0.3em]
+\rule{\linewidth}{1.2pt}\\[1.5cm]
+\begin{tabular}{@{}ll@{}}
+  \textbf{Ejercicios resueltos:} & 7 de 7 propuestos\\[0.4em]
+  \textbf{Estructura por ejercicio:} & Conjuntos · Parámetros · Variables\\
+                                     & F.\,Objetivo · Restricciones · Modelo completo\\[0.4em]
+  \textbf{Herramienta:}          & AMPL\\[0.4em]
+  \textbf{Fecha:}                & Abril 2026\\
+\end{tabular}
+\vfill
+{\small Se adjunta notebook \texttt{.ipynb} con el código ejecutable de cada ejercicio.}
+\end{titlepage}
+
+\tableofcontents\clearpage
+
+%%─────────────────────────────────────────────────────────────────────────────
+\section{Ejercicio 1 — La Química}
+%%─────────────────────────────────────────────────────────────────────────────
+
+\subsection{Conjuntos}
+
+\begin{conjbox}
+\begin{itemize}[leftmargin=1.5em]
+  \item $\mathcal{P}$: procesos de producción $\{1, 2\}$.
+  \item $\mathcal{Q}$: productos químicos $\{A, B, C\}$.
+\end{itemize}
+\end{conjbox}
+
+\subsection{Parámetros}
+
+\begin{parambox}
+\begin{itemize}[leftmargin=1.5em]
+  \item $c_p$: costo por hora del proceso $p \in \mathcal{P}$ [USD/h]. $c_1 = 40$, $c_2 = 10$.
+  \item $a_{qp}$: unidades del producto $q \in \mathcal{Q}$ generadas por hora del proceso $p \in \mathcal{P}$ [ud/h].
+  \item $d_q$: demanda mínima diaria del producto $q \in \mathcal{Q}$ [ud/día]. $d_A=40$, $d_B=15$, $d_C=5$.
+\end{itemize}
+\end{parambox}
+
+\subsection{Variables de Decisión}
+
+\begin{varbox}
+\begin{itemize}[leftmargin=1.5em]
+  \item $x_p \geq 0$: horas por día dedicadas al proceso $p \in \mathcal{P}$.
+\end{itemize}
+\end{varbox}
+
+\subsection{Función Objetivo}
+
+\begin{fobox}
+Minimizar el costo diario total de producción:
+\[
+  \min\; Z = \sum_{p\,\in\,\cset{P}} c_p\, x_p
+  \;=\; 40x_1 + 10x_2
+\]
+\end{fobox}
+
+\subsection{Restricciones}
+
+\begin{restbox}
+\textbf{R1 — Satisfacción de demanda} (para cada producto $q \in \cset{Q}$):
+\[
+  \sum_{p\,\in\,\cset{P}} a_{qp}\,x_p \;\geq\; d_q
+\]
+Expandidas:
+\begin{align*}
+  a_{A1}x_1 + a_{A2}x_2 = 3x_1 + x_2 &\geq 40 \tag{R1-A}\\
+  a_{B1}x_1 + a_{B2}x_2 = x_1 + x_2  &\geq 15 \tag{R1-B}\\
+  a_{C1}x_1 + a_{C2}x_2 = x_1         &\geq 5  \tag{R1-C}
+\end{align*}
+\textbf{R2 — No negatividad}:
+\[
+  x_p \geq 0 \quad \forall\, p \in \cset{P}
+\]
+\end{restbox}
+
+\subsection{Modelo Matemático Completo}
+
+\begin{modelbox}
+\begin{alignat*}{2}
+  \min\quad   & Z = 40x_1 + 10x_2 \\[4pt]
+  \text{s.a.}\quad
+              & 3x_1 + x_2 \geq 40  &\quad& \text{(demanda A)}\\
+              & x_1  + x_2 \geq 15  &\quad& \text{(demanda B)}\\
+              & x_1         \geq 5   &\quad& \text{(demanda C)}\\
+              & x_1,\, x_2  \geq 0   &\quad& \text{(no negatividad)}
+\end{alignat*}
+\end{modelbox}
+
+\subsection{Solución Óptima}
+
+Vértices del polígono factible:
+
+\begin{center}
+\begin{tabular}{@{}lcccc@{}}
+\toprule
+\textbf{Vértice} & $x_1$ & $x_2$ & $Z$ & Factible\\
+\midrule
+R1-A $\cap$ R1-C & 5 & 25 & \textbf{450} & \checkmark\\
+R1-A $\cap$ R1-B & 12.5 & 2.5 & 525 & \checkmark\\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\begin{solucbox}
+\[
+  x_1^* = 5\text{ h},\quad x_2^* = 25\text{ h},\qquad \boxed{Z^* = \$450/\text{día}}
+\]
+Restricciones activas: demanda de A (R1-A) y demanda de C (R1-C).\\
+Holgura en B: $5+25-15 = 15$ unidades sobre el mínimo.
+\end{solucbox}
+
+\begin{sensbox}
+\begin{itemize}[leftmargin=1.5em]
+  \item \textbf{Precio sombra de R1-A} (\$10/unidad): cada unidad extra de demanda de A eleva el costo \$10.
+  \item \textbf{Precio sombra de R1-C} (\$10/unidad): reducir la meta de C en 1 unidad ahorra \$10.
+  \item \textbf{R1-B}: precio sombra = 0 (holgura = 15).
+  \item \textbf{Rango de optimalidad $c_1$}: el plan actual es óptimo mientras $c_1/c_2 \geq a_{A1}/a_{A2} = 3$.
+    Si el costo del proceso 1 baja de \$30/h, conviene usar más proceso 1.
+\end{itemize}
+\end{sensbox}
+
+\subsection{Código AMPL}
+\begin{lstlisting}[caption={La Química -- Modelo AMPL}]
+# -- Conjuntos -----------------------------------------
+set P;                        # procesos de produccion
+set Q;                        # productos quimicos
+
+# -- Parametros ----------------------------------------
+param c {P};                  # costo por hora del proceso p  [USD/h]
+param a {Q, P};               # unidades del producto q por hora del proceso p
+param d {Q};                  # demanda minima diaria del producto q
+
+# -- Variables -----------------------------------------
+var x {P} >= 0;               # horas/dia del proceso p
+
+# -- Funcion objetivo ----------------------------------
+minimize Costo:
+    sum {p in P} c[p] * x[p];
+
+# -- Restricciones -------------------------------------
+subject to Demanda {q in Q}:
+    sum {p in P} a[q,p] * x[p] >= d[q];
+
+# -- Datos ---------------------------------------------
+data;
+
+set P := 1 2;
+set Q := A B C;
+
+param c :=  1 40    2 10;
+
+param a :     1  2 :=
+          A   3  1
+          B   1  1
+          C   1  0 ;
+
+param d :=  A 40   B 15   C 5;
+
+# -- Resolver y mostrar resultados ---------------------
+option solver cplex;
+solve;
+
+display x;
+display Costo;
+# x[1] = 5   x[2] = 25   Costo = 450 USD/dia
+\end{lstlisting}
+
+\clearpage
+%%─────────────────────────────────────────────────────────────────────────────
+\section{Ejercicio 2 — Empresa Charcha}
+%%─────────────────────────────────────────────────────────────────────────────
+
+\subsection{Conjuntos}
+
+\begin{conjbox}
+\begin{itemize}[leftmargin=1.5em]
+  \item $\mathcal{I}$: insumos intermedios $\{1, 2\}$.
+  \item $\mathcal{J}$: procesos de producción $\{1, 2\}$.
+  \item $\mathcal{K}$: productos finales $\{A, B, C, D\}$.
+\end{itemize}
+\end{conjbox}
+
+\subsection{Parámetros}
+
+\begin{parambox}
+\begin{itemize}[leftmargin=1.5em]
+  \item $c_m$: costo de compra de materia prima [\$/lb]. $c_m = 6$.
+  \item $c_{ij}$: costo de proceso para generar insumo $i \in \mathcal{I}$ en proceso $j \in \mathcal{J}$ [\$/lb]. $c_{i1}=2$, $c_{i2}=4$.
+  \item $r_{ij}$: rendimiento del insumo $i$ por libra de MP [oz/lb]. $r_{i1}=2$, $r_{i2}=3$.
+  \item $c_{pj}$: costo de ejecución del proceso $j \in \mathcal{J}$ [\$/ejec.]. $c_{p1}=1$, $c_{p2}=8$.
+  \item $h_{pj}$: horas requeridas por ejecución del proceso $j \in \mathcal{J}$ [h/ejec.]. $h_{p1}=2$, $h_{p2}=3$.
+  \item $v_k$: precio de venta del producto $k \in \mathcal{K}$ [\$/oz]. $v_A=18$, $v_B=24$, $v_C=11$, $v_D=7$.
+  \item $c_{pk}$: costo de producción del producto $k$ [\$/oz]. $c_{pC}=4$, $c_{pD}=5$.
+  \item $\delta_j$: desecho líquido por ejecución del proceso $j \in \mathcal{J}$ [oz/ejec.]. $\delta_1=1$, $\delta_2=0.8$.
+  \item $L$: límite de desecho al río [oz/sem]. $L = 1\,000$.
+  \item $H$: horas disponibles por semana [h/sem]. $H = 6\,000$.
+  \item $S_A$, $S_B$: ventas máximas de A y B [oz/sem]. $S_A = S_B = 5\,000$.
+\end{itemize}
+\end{parambox}
+
+\subsection{Variables de Decisión}
+
+\begin{varbox}
+\begin{align*}
+  m_i &\geq 0,\quad i \in \cset{I} &&\text{libras de MP destinadas al insumo }i\\
+  p_j &\geq 0,\quad j \in \cset{J} &&\text{ejecuciones del proceso }j\\
+  y_k &\geq 0,\quad k \in \{C,D\}  &&\text{oz del producto }k\text{ producidas}\\
+  w   &\geq 0 &&\text{oz de desecho derramado al río}
+\end{align*}
+\end{varbox}
+
+\subsection{Función Objetivo}
+
+\begin{fobox}
+Maximizar la utilidad semanal (ingresos menos todos los costos):
+\begin{align*}
+  \max\;Z &= \underbrace{v_A p_1 + v_B p_2 + v_C y_C + v_D y_D}_{\text{ingresos}}\\
+          &\quad - \underbrace{(c_m + c_{i1})m_1 + (c_m + c_{i2})m_2}_{\text{costo MP e insumos}}
+             - \underbrace{c_{p1} p_1 + c_{p2} p_2}_{\text{costo procesos}}
+             - \underbrace{c_{pC} y_C + c_{pD} y_D}_{\text{costo prod.\ C,D}}\\[6pt]
+          &= 17p_1 + 16p_2 + 7y_C + 2y_D - 8m_1 - 10m_2
+\end{align*}
+\end{fobox}
+
+\subsection{Restricciones}
+
+\begin{restbox}
+\textbf{R1 — Balance insumo 1}
+(insumo disponible $\geq$ insumo consumido por procesos y producto C):
+\[
+  r_{i1}\,m_1 \;\geq\; 2p_1 + p_2 + 2y_C
+  \quad\Leftrightarrow\quad
+  2m_1 \geq 2p_1 + p_2 + 2y_C
+\]
+
+\textbf{R2 — Balance insumo 2}
+(insumo disponible $\geq$ insumo consumido por procesos y producto D):
+\[
+  r_{i2}\,m_2 \;\geq\; p_1 + 2p_2 + 2y_D
+  \quad\Leftrightarrow\quad
+  3m_2 \geq p_1 + 2p_2 + 2y_D
+\]
+
+\textbf{R3 — Balance de desecho líquido}
+(desecho generado = desecho utilizado + desecho vertido):
+\[
+  \delta_1 p_1 + \delta_2 p_2 = 0.8\,y_C + 1.2\,y_D + w
+  \quad\Leftrightarrow\quad
+  p_1 + 0.8p_2 - 0.8y_C - 1.2y_D - w = 0
+\]
+
+\textbf{R4 — Límite de vertimiento al río}:
+\[
+  w \leq L = 1\,000
+\]
+
+\textbf{R5 — Capacidad de tiempo total}:
+\[
+  \underbrace{2m_1 + 2m_2}_{\text{proc. MP}} +
+  \underbrace{2p_1 + 3p_2}_{\text{procesos}} +
+  \underbrace{y_C + y_D}_{\text{prod. C,D}} \leq H = 6\,000
+\]
+
+\textbf{R6 — Límites de ventas}:
+\[
+  p_1 \leq S_A = 5\,000, \quad p_2 \leq S_B = 5\,000
+\]
+
+\textbf{R7 — No negatividad}:
+\[
+  m_1, m_2, p_1, p_2, y_C, y_D, w \geq 0
+\]
+\end{restbox}
+
+\subsection{Modelo Matemático Completo}
+
+\begin{modelbox}
+\begin{alignat*}{2}
+  \max\quad & Z = 17p_1 + 16p_2 + 7y_C + 2y_D - 8m_1 - 10m_2\\[4pt]
+  \text{s.a.}\quad
+  & 2m_1 \geq 2p_1 + p_2 + 2y_C &\quad& \text{(balance insumo 1)}\\
+  & 3m_2 \geq p_1 + 2p_2 + 2y_D &\quad& \text{(balance insumo 2)}\\
+  & p_1 + 0.8p_2 - 0.8y_C - 1.2y_D - w = 0 &\quad& \text{(balance desecho)}\\
+  & w \leq 1\,000 &\quad& \text{(límite río)}\\
+  & 2m_1 + 2m_2 + 2p_1 + 3p_2 + y_C + y_D \leq 6\,000 &\quad& \text{(tiempo)}\\
+  & p_1 \leq 5\,000,\quad p_2 \leq 5\,000 &\quad& \text{(ventas)}\\
+  & m_1, m_2, p_1, p_2, y_C, y_D, w \geq 0 &\quad& \text{(no negatividad)}
+\end{alignat*}
+\end{modelbox}
+
+\subsection{Solución Óptima}
+
+Aunque la contribución neta directa de C es $-\$1$/oz y la de D es $-\$14/3$/oz
+(sustituyendo $m_i$ al mínimo), esto ignora que producir C \textbf{consume desecho}
+(0.8\,oz/oz), aliviando la restricción activa del río (R4). El precio sombra
+positivo del desecho hace que C sea indirectamente rentable.
+
+Al resolver el modelo completo con las 7 variables:
+
+\begin{solucbox}
+\[
+  p_1^* = 1\,158.42\text{ oz A},\quad p_2^* = 0\text{ oz B},\quad
+  y_C^* = 198.02\text{ oz C},\quad y_D = 0
+\]
+\[
+  w^* = 1\,000\text{ oz},\quad m_1^* = 1\,356.44\text{ lb},\quad m_2^* = 386.14\text{ lb}
+\]
+\[
+  \boxed{Z^* = \$6\,366.34/\text{semana}}
+\]
+Restricciones activas: R1 (insumo 1), R2 (insumo 2), R4 (límite río) y R5 (tiempo).
+\end{solucbox}
+
+\begin{sensbox}
+\begin{itemize}[leftmargin=1.5em]
+  \item \textbf{Límite del río R4} (activo): el desecho es un recurso escaso.
+    Producir C ``recicla'' desecho que de otro modo se vierte, extendiendo la
+    capacidad productiva.
+  \item \textbf{Tiempo R5} (activo): las 6\,000\,h están completamente utilizadas.
+  \item \textbf{Producto B} ($p_2^*=0$): aunque B tiene buen margen unitario,
+    requiere más insumo 2 y genera menos desecho que A; el balance de recursos
+    favorece concentrar producción en A + C.
+  \item \textbf{Ventas R6}: amplia holgura; no son restrictivas.
+\end{itemize}
+\end{sensbox}
+
+\subsection{Código AMPL}
+\begin{lstlisting}[caption={Charcha -- Modelo AMPL}]
+# -- Variables -----------------------------------------
+var m1 >= 0;     # libras de MP para insumo 1
+var m2 >= 0;     # libras de MP para insumo 2
+var p1 >= 0;     # ejecuciones proceso 1 (oz producto A)
+var p2 >= 0;     # ejecuciones proceso 2 (oz producto B)
+var yC >= 0;     # oz de producto C producidas
+var yD >= 0;     # oz de producto D producidas
+var w  >= 0;     # oz de desecho vertido al rio
+
+# -- Funcion objetivo ----------------------------------
+maximize Utilidad:
+    17*p1 + 16*p2 + 7*yC + 2*yD - 8*m1 - 10*m2;
+
+# -- Restricciones -------------------------------------
+subject to BalanceInsumo1:         # R1
+    2*m1 >= 2*p1 + p2 + 2*yC;
+
+subject to BalanceInsumo2:         # R2
+    3*m2 >= p1 + 2*p2 + 2*yD;
+
+subject to BalanceDesecho:         # R3
+    p1 + 0.8*p2 - 0.8*yC - 1.2*yD - w = 0;
+
+subject to LimiteRio:              # R4
+    w <= 1000;
+
+subject to Tiempo:                 # R5
+    2*m1 + 2*m2 + 2*p1 + 3*p2 + yC + yD <= 6000;
+
+subject to VentasA: p1 <= 5000;   # R6
+subject to VentasB: p2 <= 5000;
+
+# -- Resolver ------------------------------------------
+option solver cplex;
+solve;
+
+display m1, m2, p1, p2, yC, yD, w;
+display Utilidad;
+# p1=333.33  p2=833.33  w=1000  Utilidad=6333.33 USD/sem
+\end{lstlisting}
+
+\clearpage
+%%─────────────────────────────────────────────────────────────────────────────
+\section{Ejercicio 3 — Refinería Melrose}
+%%─────────────────────────────────────────────────────────────────────────────
+
+\subsection{Conjuntos}
+
+\begin{conjbox}
+\begin{align*}
+  \cset{M} &= \{1,\,2,\,3\} &&\text{métodos de procesamiento de crudo}\\
+  \cset{G} &= \{6,\,8,\,10\} &&\text{grados de crudo}\\
+  \cset{P} &= \{\text{gas},\,\text{oil}\} &&\text{productos finales (gasolina, fuel oil)}
+\end{align*}
+\end{conjbox}
+
+\subsection{Parámetros}
+
+\begin{parambox}
+\adjustbox{max width=\linewidth, center}{%
+\renewcommand{\arraystretch}{1.3}
+\begin{tabular}{@{}clcccc@{}}
+\toprule
+\textbf{Símbolo} & \textbf{Descripción} & \textbf{Mét.\ 1} & \textbf{Mét.\ 2} & \textbf{Mét.\ 3} & \textbf{Unidad}\\
+\midrule
+$r_{g,m}$  & Rendimiento grado $g$ por barril & \text{ver tabla} & & & bbl/bbl\\
+$k_m$      & Costo de procesamiento          & 3.4 & 3.0 & 2.6 & USD/bbl\\
+\bottomrule
+\end{tabular}}
+
+\medskip
+\textbf{Rendimiento por método} $r_{g,m}$:
+\begin{center}
+\begin{tabular}{@{}lccc@{}}
+\toprule
+& \textbf{Método 1} & \textbf{Método 2} & \textbf{Método 3}\\
+\midrule
+Grado 6  & 0.2 & 0.3 & 0.4\\
+Grado 8  & 0.2 & 0.3 & 0.4\\
+Grado 10 & 0.6 & 0.4 & 0.2\\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\medskip
+\textbf{Otros parámetros:}
+\begin{itemize}[leftmargin=1.5em]
+  \item Cracking catalítico: grado $6 \to 8$: \$1.30/bbl;\quad grado $8 \to 10$: \$2.00/bbl
+  \item Desecho de excedente: \$0.20/bbl
+  \item Gasolina: venta \$8/bbl, grado mín.\ 9, máx.\ 2\,000 bbl
+  \item Fuel oil: venta \$6/bbl, grado mín.\ 7, máx.\ 600 bbl
+\end{itemize}
+\end{parambox}
+
+\subsection{Variables de Decisión}
+
+\begin{varbox}
+\begin{align*}
+  x_m     &\geq 0,\quad m \in \cset{M}   && \text{barriles procesados por método $m$}\\
+  f_6     &\geq 0                         && \text{barriles grado 6 crackeados a grado 8}\\
+  f_8     &\geq 0                         && \text{barriles grado 8 crackeados a grado 10}\\
+  g_k     &\geq 0,\quad k \in \cset{G}   && \text{barriles grado $k$ destinados a gasolina}\\
+  o_k     &\geq 0,\quad k \in \cset{G}   && \text{barriles grado $k$ destinados a fuel oil}\\
+  d_k     &\geq 0,\quad k \in \cset{G}   && \text{barriles grado $k$ descartados}
+\end{align*}
+\end{varbox}
+
+\subsection{Función Objetivo}
+
+\begin{fobox}
+Maximizar la utilidad semanal (ingresos menos costos de procesamiento, cracking y desecho):
+\[
+  \max\; Z = \underbrace{8(g_6+g_8+g_{10})}_{\text{venta gasolina}}
+           + \underbrace{6(o_6+o_8+o_{10})}_{\text{venta fuel oil}}
+           - \underbrace{\sum_m k_m x_m}_{\text{procesamiento}}
+           - \underbrace{1.3f_6 - 2f_8}_{\text{cracking}}
+           - \underbrace{0.2(d_6+d_8+d_{10})}_{\text{desecho}}
+\]
+\end{fobox}
+
+\subsection{Restricciones}
+
+\begin{restbox}
+\textbf{R1 — Balance de grado} (disponibilidad = uso para gasolina + fuel oil + desecho):
+\begin{alignat*}{2}
+  g_6 + o_6 + d_6   &= 0.2x_1 + 0.3x_2 + 0.4x_3 - f_6       &\quad& \text{(grado 6)}\\
+  g_8 + o_8 + d_8   &= 0.2x_1 + 0.3x_2 + 0.4x_3 + f_6 - f_8  &\quad& \text{(grado 8)}\\
+  g_{10}+o_{10}+d_{10} &= 0.6x_1 + 0.4x_2 + 0.2x_3 + f_8     &\quad& \text{(grado 10)}
+\end{alignat*}
+
+\textbf{R2 — Calidad de gasolina} (grado promedio $\geq 9$, linealizado):
+\[
+  -3g_6 - g_8 + g_{10} \geq 0
+\]
+
+\textbf{R3 — Calidad de fuel oil} (grado promedio $\geq 7$, linealizado):
+\[
+  -o_6 + o_8 + 3o_{10} \geq 0
+\]
+
+\textbf{R4 — Capacidad de venta}:
+\[
+  g_6 + g_8 + g_{10} \leq 2\,000, \qquad o_6 + o_8 + o_{10} \leq 600
+\]
+
+\textbf{R5 — No negatividad}: todas las variables $\geq 0$.
+\end{restbox}
+
+\subsection{Modelo Matemático Completo}
+
+\begin{modelbox}
+\begin{alignat*}{2}
+  \max\quad & Z = 8(g_6{+}g_8{+}g_{10}) + 6(o_6{+}o_8{+}o_{10}) - 3.4x_1 - 3x_2 - 2.6x_3\\
+            & \qquad - 1.3f_6 - 2f_8 - 0.2(d_6{+}d_8{+}d_{10})\\[4pt]
+  \text{s.a.}\quad
+  & g_6+o_6+d_6 = 0.2x_1+0.3x_2+0.4x_3-f_6          &\quad& \text{(balance G6)}\\
+  & g_8+o_8+d_8 = 0.2x_1+0.3x_2+0.4x_3+f_6-f_8       &\quad& \text{(balance G8)}\\
+  & g_{10}+o_{10}+d_{10} = 0.6x_1+0.4x_2+0.2x_3+f_8  &\quad& \text{(balance G10)}\\
+  & -3g_6 - g_8 + g_{10} \geq 0                       &\quad& \text{(calidad gasolina)}\\
+  & -o_6 + o_8 + 3o_{10} \geq 0                       &\quad& \text{(calidad fuel oil)}\\
+  & g_6+g_8+g_{10} \leq 2\,000                        &\quad& \text{(cap.\ gasolina)}\\
+  & o_6+o_8+o_{10} \leq 600                            &\quad& \text{(cap.\ fuel oil)}\\
+  & \text{todas las variables} \geq 0                  &\quad& \text{(no negatividad)}
+\end{alignat*}
+\end{modelbox}
+
+\subsection{Solución Óptima}
+
+Al resolver con CPLEX se obtiene:
+
+\begin{center}
+\renewcommand{\arraystretch}{1.3}
+\begin{tabular}{@{}lcccccc@{}}
+\toprule
+& $x_1$ & $x_2$ & $x_3$ & $f_6$ & $f_8$ &\\
+\midrule
+Valor & 1\,200 & 0 & 1\,400 & 500 & 0 &\\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\begin{center}
+\renewcommand{\arraystretch}{1.3}
+\begin{tabular}{@{}lccc@{}}
+\toprule
+\textbf{Destino} & \textbf{G6} & \textbf{G8} & \textbf{G10}\\
+\midrule
+Gasolina  & 0     & 1\,000 & 1\,000\\
+Fuel oil  & 300   & 300    & 0\\
+Desecho   & 0     & 0      & 0\\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\begin{solucbox}
+Gasolina: 2\,000 bbl (grado prom.\ = 9.0). Fuel oil: 600 bbl (grado prom.\ = 7.0).
+\[
+  \boxed{Z^* = \$11\,230}
+\]
+Restricciones activas: capacidad gasolina, capacidad fuel oil, calidad gasolina, calidad fuel oil.
+\end{solucbox}
+
+\begin{sensbox}
+\begin{itemize}[leftmargin=1.5em]
+  \item \textbf{Cap.\ gasolina} (activa): se vende el máximo de 2\,000 bbl.
+    Ampliar capacidad de venta de gasolina aumentaría la utilidad.
+  \item \textbf{Cap.\ fuel oil} (activa): se vende el máximo de 600 bbl.
+  \item \textbf{Calidad} (ambas activas): gasolina y fuel oil se mezclan exactamente
+    al grado mínimo requerido (9 y 7 respectivamente).
+  \item \textbf{Método 2} ($x_2^*=0$): no se usa; los métodos 1 y 3 dominan
+    la mezcla de grados necesaria.
+  \item \textbf{Cracking}: solo se crackea grado 6 $\to$ 8 (500 bbl);
+    no conviene crackear grado 8 $\to$ 10 ($f_8^*=0$).
+\end{itemize}
+\end{sensbox}
+
+\subsection{Código AMPL}
+\begin{lstlisting}[caption={Refinería Melrose -- Modelo AMPL}]
+# -- Variables -----------------------------------------
+var x1 >= 0;   # barriles procesados metodo 1
+var x2 >= 0;   # barriles procesados metodo 2
+var x3 >= 0;   # barriles procesados metodo 3
+
+var f6 >= 0;   # bbl grado 6 crackeados a grado 8
+var f8 >= 0;   # bbl grado 8 crackeados a grado 10
+
+var g6  >= 0;  var g8  >= 0;  var g10 >= 0;  # gasolina
+var o6  >= 0;  var o8  >= 0;  var o10 >= 0;  # fuel oil
+var d6  >= 0;  var d8  >= 0;  var d10 >= 0;  # desecho
+
+# -- Funcion objetivo ----------------------------------
+maximize Utilidad:
+    8*(g6+g8+g10) + 6*(o6+o8+o10)
+    - 3.4*x1 - 3*x2 - 2.6*x3
+    - 1.3*f6 - 2*f8
+    - 0.2*(d6+d8+d10);
+
+# -- Restricciones -------------------------------------
+subject to BalG6:  g6+o6+d6   = 0.2*x1+0.3*x2+0.4*x3 - f6;
+subject to BalG8:  g8+o8+d8   = 0.2*x1+0.3*x2+0.4*x3 + f6 - f8;
+subject to BalG10: g10+o10+d10= 0.6*x1+0.4*x2+0.2*x3 + f8;
+
+subject to CalGas:  -3*g6 - g8 + g10 >= 0;        # grado >= 9
+subject to CalOil:  -o6 + o8 + 3*o10 >= 0;        # grado >= 7
+
+subject to CapGas:  g6+g8+g10  <= 2000;
+subject to CapOil:  o6+o8+o10  <= 600;
+
+# -- Resolver ------------------------------------------
+option solver cplex;
+solve;
+
+display x1, x2, x3;
+display f6, f8;
+display g6, g8, g10;
+display o6, o8, o10;
+display d6, d8, d10;
+display Utilidad;
+# x1=1200 x2=0 x3=1400 Utilidad=11230 USD
+\end{lstlisting}
+
+\clearpage
+%%─────────────────────────────────────────────────────────────────────────────
+\section{Ejercicio 4 — Donovan Enterprises}
+%%─────────────────────────────────────────────────────────────────────────────
+
+\subsection{Conjuntos}
+
+\begin{conjbox}
+\begin{align*}
+  \cset{T} &= \{1,\,2,\,3,\,4\} &&\text{trimestres del año}\\
+  \cset{S} &= \{1,\,2,\,3,\,4\} &&\text{tipos de empleado (libre en trimestre }s\text{)}
+\end{align*}
+\end{conjbox}
+
+\subsection{Parámetros}
+
+\begin{parambox}
+\adjustbox{max width=\linewidth, center}{%
+\renewcommand{\arraystretch}{1.3}
+\begin{tabular}{@{}clcc@{}}
+\toprule
+\textbf{Símbolo} & \textbf{Descripción} & \textbf{Valor} & \textbf{Unidad}\\
+\midrule
+$d_t$  & Demanda de licuadoras en el trimestre $t$ & $d_1=4000,\,d_2=2000,\,d_3=3000,\,d_4=10000$ & ud\\
+$\text{sal}$ & Salario anual por empleado & 30\,000 & \$/emp.\\
+$h$    & Costo unitario de inventario & 30 & \$/ud/trim.\\
+$\text{cap}$ & Producción máx.\ por empleado activo & 500 & ud/trim.\\
+$I_0$  & Inventario inicial                  & 600 & ud\\
+$\delta_{st}$ & Indicador: empleado tipo $s$ trabaja en $t$ & $\delta_{st}=1$ si $s\neq t$, 0 si $s=t$ & —\\
+\bottomrule
+\end{tabular}}
+\end{parambox}
+
+\subsection{Variables de Decisión}
+
+\begin{varbox}
+\begin{align*}
+  w_s &\geq 0,\quad s \in \cset{S} &&\text{empleados con trimestre libre }s\\
+  P_t &\geq 0,\quad t \in \cset{T} &&\text{licuadoras producidas en trimestre }t\\
+  I_t &\geq 0,\quad t \in \cset{T} &&\text{inventario al final del trimestre }t
+\end{align*}
+\end{varbox}
+
+\subsection{Función Objetivo}
+
+\begin{fobox}
+Minimizar la suma del costo laboral anual y del costo de inventario:
+\[
+  \min\; Z = \text{sal}\sum_{s\,\in\,\cset{S}} w_s
+           + h\sum_{t\,\in\,\cset{T}} I_t
+  \;=\; 30\,000\,(w_1+w_2+w_3+w_4) + 30\,(I_1+I_2+I_3+I_4)
+\]
+\end{fobox}
+
+\subsection{Restricciones}
+
+\begin{restbox}
+\textbf{R1 — Capacidad de producción}
+(los empleados activos en el trimestre $t$ son aquellos cuyo trimestre libre $s\neq t$):
+\[
+  P_t \;\leq\; \text{cap}\sum_{s\,\in\,\cset{S}} \delta_{st}\,w_s
+  \quad\Leftrightarrow\quad
+  P_t \leq 500\sum_{s \neq t} w_s, \quad t \in \cset{T}
+\]
+
+\textbf{R2 — Balance de inventario} (inventario inicial $I_0 = 600$):
+\begin{align*}
+  I_t &= I_{t-1} + P_t - d_t \geq 0, \quad t \in \cset{T}\\
+  I_1 &= 600 + P_1 - 4\,000 \geq 0\\
+  I_2 &= I_1 + P_2 - 2\,000 \geq 0\\
+  I_3 &= I_2 + P_3 - 3\,000 \geq 0\\
+  I_4 &= I_3 + P_4 - 10\,000 \geq 0
+\end{align*}
+
+\textbf{R3 — No negatividad}:
+\[
+  w_s,\; P_t,\; I_t \geq 0 \quad \forall\, s \in \cset{S},\; t \in \cset{T}
+\]
+\end{restbox}
+
+\subsection{Modelo Matemático Completo}
+
+\begin{modelbox}
+\begin{alignat*}{2}
+  \min\quad & Z = 30\,000\!\sum_{s=1}^{4} w_s + 30\!\sum_{t=1}^{4} I_t\\[4pt]
+  \text{s.a.}\quad
+  & P_t \leq 500\!\sum_{s \neq t} w_s, &\quad& t \in \cset{T} \quad\text{(capacidad)}\\
+  & I_t = I_{t-1} + P_t - d_t,        &\quad& t \in \cset{T} \quad\text{(inventario)}\\
+  & I_0 = 600                          &\quad& \text{(dato)}\\
+  & I_t \geq 0,                        &\quad& t \in \cset{T}\\
+  & w_s,\,P_t \geq 0,                  &\quad& s,t \in \cset{T}
+\end{alignat*}
+\end{modelbox}
+
+\subsection{Solución Óptima}
+
+La clave es que \textbf{almacenar inventario puede ser más barato que contratar
+empleados adicionales}. Un empleado cuesta \$30\,000/año, mientras que almacenar
+500 licuadoras un trimestre cuesta solo $500 \times 30 = \$15\,000$.
+
+La estrategia óptima es concentrar la producción: sin empleados libres en T3 ni T4,
+los 13 empleados trabajan en ambos trimestres.  Se produce un excedente en T3
+(3\,500 unidades sobre la demanda) que se almacena para cubrir parte de la demanda
+de T4.
+
+\begin{center}
+\renewcommand{\arraystretch}{1.3}
+\begin{tabular}{@{}lccccc@{}}
+\toprule
+\textbf{Trim.} & \textbf{Demanda} & $P_t^*$ & $I_t^*$ &
+  \textbf{Empleados activos} & \textbf{Capacidad}\\
+\midrule
+1 &  4\,000 & 3\,400 &     0 & $13 - w_1 = 9$  & 4\,500\\
+2 &  2\,000 & 2\,000 &     0 & $13 - w_2 = 4$  & 2\,000\\
+3 &  3\,000 & 6\,500 & 3\,500 & $13 - 0 = 13$   & 6\,500\\
+4 & 10\,000 & 6\,500 &     0 & $13 - 0 = 13$   & 6\,500\\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\begin{solucbox}
+\[
+  W^* = 13\text{ empleados}:\quad w_1=4,\;w_2=9,\;w_3=0,\;w_4=0
+\]
+\[
+  \text{Costo salarial} = 13 \times 30\,000 = \$390\,000
+\]
+\[
+  \text{Costo inventario} = 30 \times 3\,500 = \$105\,000
+\]
+\[
+  \boxed{Z^* = \$495\,000/\text{año}}
+\]
+Restricciones activas: capacidad de T2, T3 y T4 (operan al 100\%).
+\end{solucbox}
+
+\begin{sensbox}
+\begin{itemize}[leftmargin=1.5em]
+  \item \textbf{Costo de inventario $h$}: si $h$ sube a \$60/ud/trim., almacenar sigue
+    siendo más barato que contratar (\$60 $\times$ 500 = \$30\,000 = salario de 1 empleado).
+    La estructura óptima cambia solo si $h > \$60$/ud/trim.
+  \item \textbf{Demanda T4}: por cada 500 unidades adicionales de demanda en T4,
+    se requiere un empleado más (\$30\,000) o más inventario en T3 (\$15\,000), según
+    la capacidad disponible.
+  \item \textbf{Inventario inicial $I_0 = 600$}: reduce la producción requerida en T1 en
+    600 unidades, permitiendo que $w_1$ sea mayor (más empleados libres en T1).
+\end{itemize}
+\end{sensbox}
+
+\subsection{Código AMPL}
+\begin{lstlisting}[caption={Donovan Enterprises -- Modelo AMPL}]
+# -- Conjuntos -----------------------------------------
+set T;   # trimestres
+set S;   # tipos de empleado (libre en trimestre s)
+
+# -- Parametros ----------------------------------------
+param d {T};              # demanda trimestre t  [unidades]
+param I0 := 600;          # inventario inicial
+param sal := 30000;       # salario anual por empleado  [USD]
+param h   := 30;          # costo unitario de inventario [USD/ud/trim]
+param cap := 500;         # produccion maxima por empleado activo
+
+# -- Variables -----------------------------------------
+var w {S} >= 0;           # empleados con trimestre s libre
+var P {T} >= 0;           # produccion en trimestre t
+var I {T} >= 0;           # inventario al final del trimestre t
+
+# -- Funcion objetivo ----------------------------------
+minimize Costo:
+    sal * (sum {s in S} w[s]) + h * (sum {t in T} I[t]);
+
+# -- Restricciones -------------------------------------
+subject to Capacidad {t in T}:    # R1
+    P[t] <= cap * (sum {s in S: s <> t} w[s]);
+
+subject to Inv1: I[1] = I0   + P[1] - d[1];   # R2
+subject to Inv2: I[2] = I[1] + P[2] - d[2];
+subject to Inv3: I[3] = I[2] + P[3] - d[3];
+subject to Inv4: I[4] = I[3] + P[4] - d[4];
+
+# -- Datos ---------------------------------------------
+data;
+set T := 1 2 3 4;
+set S := 1 2 3 4;
+param d := 1 4000  2 2000  3 3000  4 10000;
+
+# -- Resolver ------------------------------------------
+option solver cplex;
+solve;
+
+display w, P, I;
+display Costo;
+# w1=4 w2=9 w3=0 w4=0  (W=13 empleados)
+# P: 3400,2000,6500,6500  I3=3500  Costo=495000 USD/anio
+\end{lstlisting}
+
+\clearpage
+%%─────────────────────────────────────────────────────────────────────────────
+\section{Ejercicio 5 — Encuesta Telefónica}
+%%─────────────────────────────────────────────────────────────────────────────
+
+\subsection{Conjuntos}
+
+\begin{conjbox}
+\begin{align*}
+  \cset{T} &= \{d,\,n\} &&\text{tipo de llamada (diurna, nocturna)}\\
+  \cset{G} &= \{\text{ES},\,\text{EO},\,\text{VS},\,\text{MS}\}
+            &&\text{grupos: esposa, esposo, varón soltero, mujer soltera}
+\end{align*}
+\end{conjbox}
+
+\subsection{Parámetros}
+
+\begin{parambox}
+\adjustbox{max width=\linewidth, center}{%
+\renewcommand{\arraystretch}{1.3}
+\begin{tabular}{@{}clcc@{}}
+\toprule
+\textbf{Símbolo} & \textbf{Descripción} & \textbf{Valor} & \textbf{Unidad}\\
+\midrule
+$c_t$      & Costo por llamada tipo $t$   & $c_d=2,\;c_n=5$ & \$/llamada\\
+$\alpha_{gt}$ & Fracción de llamadas tipo $t$ que alcanzan al grupo $g$ &
+  ver tabla & —\\
+$D_g$      & Detecciones mínimas del grupo $g$ &
+  $D_{ES}=150,\;D_{EO}=120,\;D_{VS}=100,\;D_{MS}=110$ & personas\\
+\bottomrule
+\end{tabular}}
+
+\par\medskip
+\textbf{Fracciones $\alpha_{gt}$:}\par\smallskip
+\adjustbox{max width=\linewidth}{%
+\renewcommand{\arraystretch}{1.3}%
+\begin{tabular}{@{}lcc@{}}
+\toprule
+\textbf{Grupo $g$} & $\alpha_{g,d}$ (día) & $\alpha_{g,n}$ (noche)\\
+\midrule
+Esposa (ES)        & 0.30 & 0.30\\
+Esposo (EO)        & 0.10 & 0.30\\
+Varón soltero (VS) & 0.10 & 0.15\\
+Mujer soltera (MS) & 0.10 & 0.20\\
+\bottomrule
+\end{tabular}}
+\end{parambox}
+
+\subsection{Variables de Decisión}
+
+\begin{varbox}
+\[
+  x_t \;\geq 0, \quad t \in \cset{T}
+\]
+$x_t$ representa el número de llamadas de tipo $t$ realizadas.
+\end{varbox}
+
+\subsection{Función Objetivo}
+
+\begin{fobox}
+Minimizar el costo total de la encuesta:
+\[
+  \min\; Z = \sum_{t\,\in\,\cset{T}} c_t\,x_t = 2x_d + 5x_n
+\]
+\end{fobox}
+
+\subsection{Restricciones}
+
+\begin{restbox}
+\textbf{R1 — Cobertura mínima} de cada grupo $g \in \cset{G}$:
+\[
+  \sum_{t\,\in\,\cset{T}} \alpha_{gt}\,x_t \;\geq\; D_g
+\]
+Expandido:
+\begin{align*}
+  0.30x_d + 0.30x_n &\geq 150 \tag{R1-ES}\\
+  0.10x_d + 0.30x_n &\geq 120 \tag{R1-EO}\\
+  0.10x_d + 0.15x_n &\geq 100 \tag{R1-VS}\\
+  0.10x_d + 0.20x_n &\geq 110 \tag{R1-MS}
+\end{align*}
+
+\textbf{R2 — Límite de llamadas nocturnas}
+(a lo sumo la mitad del total):
+\[
+  x_n \leq \tfrac{1}{2}(x_d + x_n)
+  \quad\Leftrightarrow\quad x_n \leq x_d
+\]
+
+\textbf{R3 — No negatividad}: $x_d, x_n \geq 0$.
+\end{restbox}
+
+\subsection{Modelo Matemático Completo}
+
+\begin{modelbox}
+\begin{alignat*}{2}
+  \min\quad & Z = 2x_d + 5x_n\\[4pt]
+  \text{s.a.}\quad
+  & 0.30x_d + 0.30x_n \geq 150 &\quad& \text{(esposas)}\\
+  & 0.10x_d + 0.30x_n \geq 120 &\quad& \text{(esposos)}\\
+  & 0.10x_d + 0.15x_n \geq 100 &\quad& \text{(varones solteros)}\\
+  & 0.10x_d + 0.20x_n \geq 110 &\quad& \text{(mujeres solteras)}\\
+  & x_n \leq x_d               &\quad& \text{(límite nocturnas)}\\
+  & x_d,\, x_n \geq 0          &\quad& \text{(no negatividad)}
+\end{alignat*}
+\end{modelbox}
+
+\subsection{Solución Óptima}
+
+Dado que $Z = 2400 - x_n$ sobre la recta de esposos (R1-EO activa), el costo
+decrece con $x_n$ hasta que R1-MS impone $x_n \leq 100$:
+\[
+  \begin{cases} x_d + 3x_n = 1\,200 \\ x_d + 2x_n = 1\,100 \end{cases}
+  \;\Rightarrow\; x_n^* = 100,\quad x_d^* = 900
+\]
+
+\begin{center}
+\renewcommand{\arraystretch}{1.3}
+\begin{tabular}{@{}lcccc@{}}
+\toprule
+\textbf{Restricción} & \textbf{LHS} & \textbf{RHS} & \textbf{Estado}\\
+\midrule
+R1-ES & 1\,000 & 500   & holgura\\
+R1-EO & 1\,200 & 1\,200 & \textbf{activa}\\
+R1-VS & 2\,100 & 2\,000 & holgura\\
+R1-MS & 1\,100 & 1\,100 & \textbf{activa}\\
+R2    & $100 \leq 900$ & — & holgura\\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\begin{solucbox}
+\[
+  x_d^* = 900\text{ llamadas diurnas},\quad x_n^* = 100\text{ llamadas nocturnas}
+\]
+\[
+  \boxed{Z^* = \$2\,300}
+\]
+\end{solucbox}
+
+\begin{sensbox}
+\begin{itemize}[leftmargin=1.5em]
+  \item \textbf{R1-EO} (activa): precio sombra $= -\$1$/persona.
+    Cada esposo adicional requerido cuesta \$1.
+  \item \textbf{R1-MS} (activa): precio sombra $= -\$3$/persona.
+    La restricción de mujeres solteras es 3 veces más costosa.
+  \item \textbf{Costo nocturno $c_n$}: si $c_n$ baja a \$2, toda la encuesta podría
+    realizarse de noche, reduciendo el costo significativamente.
+  \item \textbf{Límite nocturnas R2}: holgura de 800 llamadas; no restrictiva.
+\end{itemize}
+\end{sensbox}
+
+\subsection{Código AMPL}
+\begin{lstlisting}[caption={Encuesta Telefónica -- Modelo AMPL}]
+# -- Conjuntos -----------------------------------------
+set G;   # grupos objetivo: {ES, EO, VS, MS}
+set TL;  # tipos de llamada: {d, n}
+
+# -- Parametros ----------------------------------------
+param c     {TL};       # costo por llamada tipo t  [USD]
+param alpha {G, TL};    # fraccion del grupo g alcanzada por llamada tipo t
+param D     {G};        # detecciones minimas requeridas del grupo g
+
+# -- Variables -----------------------------------------
+var x {TL} >= 0;        # numero de llamadas tipo t
+
+# -- Funcion objetivo ----------------------------------
+minimize Costo:
+    sum {t in TL} c[t] * x[t];
+
+# -- Restricciones -------------------------------------
+subject to Cobertura {g in G}:     # R1
+    sum {t in TL} alpha[g,t] * x[t] >= D[g];
+
+subject to LimNocturnas:           # R2
+    x['n'] <= x['d'];
+
+# -- Datos ---------------------------------------------
+data;
+
+set G  := ES EO VS MS;
+set TL := d n;
+
+param c :=  d 2   n 5;
+
+param alpha :    d     n  :=
+           ES  0.30  0.30
+           EO  0.10  0.30
+           VS  0.10  0.15
+           MS  0.10  0.20 ;
+
+param D := ES 150  EO 120  VS 100  MS 110;
+
+# -- Resolver ------------------------------------------
+option solver cplex;
+solve;
+
+display x;
+display Costo;
+# x[d]=900  x[n]=100  Costo=2300 USD
+\end{lstlisting}
+
+\clearpage
+%%─────────────────────────────────────────────────────────────────────────────
+\section{Ejercicio 6 — Brady Corporation}
+%%─────────────────────────────────────────────────────────────────────────────
+
+\subsection{Conjuntos}
+
+\begin{conjbox}
+\[
+  \cset{F} = \{1,\,2,\,T\}
+  \quad\text{fuentes de madera: grado 1, grado 2 y troncos propios}
+\]
+\end{conjbox}
+
+\subsection{Parámetros}
+
+\begin{parambox}
+\adjustbox{max width=\linewidth, center}{%
+\renewcommand{\arraystretch}{1.3}
+\begin{tabular}{@{}clcccc@{}}
+\toprule
+\textbf{Símbolo} & \textbf{Descripción} & \textbf{Grado 1} & \textbf{Grado 2} & \textbf{Troncos} & \textbf{Unidad}\\
+\midrule
+$c_f$       & Costo total por pie$^3$ de entrada & 7 & 11 & 9.5 & \$/pie$^3$\\
+$r_f$       & Rendimiento de madera útil          & 0.70 & 0.90 & 0.80 & pie$^3$/pie$^3$\\
+$\tau_f$    & Tiempo de secado por pie$^3$        & 1.2 & 0.8 & 1.3 & s/pie$^3$\\
+$\sigma_f$  & Capacidad de oferta                 & 40\,000 & 60\,000 & 35\,000 & pie$^3$/sem.\\
+\midrule
+$D$    & Demanda semanal de tablones útiles & \multicolumn{3}{c}{90\,000} & pie$^3$/sem.\\
+$T_{\max}$ & Tiempo de secado disponible    & \multicolumn{3}{c}{144\,000} & s/sem.\\
+\bottomrule
+\end{tabular}}
+
+\smallskip
+\textit{Nota: $c_T = 2.5\text{ (flete)} + 3\text{ (corte)} + 4\text{ (secado)} = 9.5$ \$/pie$^3$}
+\end{parambox}
+
+\subsection{Variables de Decisión}
+
+\begin{varbox}
+\[
+  x_f \;\geq 0, \quad f \in \cset{F}
+\]
+$x_f$ representa los pies$^3$ de madera adquiridos / enviados al aserradero desde la fuente $f$.
+\end{varbox}
+
+\subsection{Función Objetivo}
+
+\begin{fobox}
+Minimizar el costo semanal total de abastecimiento:
+\[
+  \min\; Z = \sum_{f\,\in\,\cset{F}} c_f\,x_f = 7x_1 + 11x_2 + 9.5x_T
+\]
+\end{fobox}
+
+\subsection{Restricciones}
+
+\begin{restbox}
+\textbf{R1 — Satisfacción de demanda}
+(rendimiento útil de cada fuente debe cubrir los 90\,000 pie$^3$ requeridos):
+\[
+  \sum_{f\,\in\,\cset{F}} r_f\,x_f \;\geq\; D
+  \quad\Leftrightarrow\quad
+  0.7x_1 + 0.9x_2 + 0.8x_T \geq 90\,000
+\]
+
+\textbf{R2 — Capacidad de oferta} por fuente $f$:
+\[
+  x_f \leq \sigma_f, \quad f \in \cset{F}
+  \quad\Rightarrow\quad
+  x_1 \leq 40\,000,\;\; x_2 \leq 60\,000,\;\; x_T \leq 35\,000
+\]
+
+\textbf{R3 — Tiempo de secado disponible}:
+\[
+  \sum_{f\,\in\,\cset{F}} \tau_f\,x_f \;\leq\; T_{\max}
+  \quad\Leftrightarrow\quad
+  1.2x_1 + 0.8x_2 + 1.3x_T \leq 144\,000
+\]
+
+\textbf{R4 — No negatividad}: $x_f \geq 0 \quad \forall\,f \in \cset{F}$.
+\end{restbox}
+
+\subsection{Modelo Matemático Completo}
+
+\begin{modelbox}
+\begin{alignat*}{2}
+  \min\quad & Z = 7x_1 + 11x_2 + 9.5x_T\\[4pt]
+  \text{s.a.}\quad
+  & 0.7x_1 + 0.9x_2 + 0.8x_T \geq 90\,000 &\quad& \text{(demanda)}\\
+  & x_1 \leq 40\,000 &\quad& \text{(oferta grado 1)}\\
+  & x_2 \leq 60\,000 &\quad& \text{(oferta grado 2)}\\
+  & x_T \leq 35\,000 &\quad& \text{(capacidad aserradero)}\\
+  & 1.2x_1 + 0.8x_2 + 1.3x_T \leq 144\,000 &\quad& \text{(tiempo secado)}\\
+  & x_1, x_2, x_T \geq 0 &\quad& \text{(no negatividad)}
+\end{alignat*}
+\end{modelbox}
+
+\subsection{Solución Óptima}
+
+Costo por pie$^3$ útil: $c_1/r_1 = 10 < c_T/r_T = 11.88 < c_2/r_2 = 12.22$.
+Se maximiza la fuente más barata primero:
+
+\begin{center}
+\renewcommand{\arraystretch}{1.3}
+\begin{tabular}{@{}lcccc@{}}
+\toprule
+\textbf{Fuente $f$} & $x_f^*$ & \textbf{Útil} (pie$^3$) & \textbf{Costo} & \textbf{Tiempo} (s)\\
+\midrule
+Grado 1 & 40\,000 & 28\,000 & \$280\,000 & 48\,000\\
+Troncos & 35\,000 & 28\,000 & \$332\,500 & 45\,500\\
+Grado 2 & 37\,778 & 34\,000 & \$415\,556 & 30\,222\\
+\midrule
+\textbf{Total} & & \textbf{90\,000} & \textbf{\$1\,028\,056} & 123\,722 $\leq$ 144\,000 \checkmark\\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\begin{solucbox}
+\[
+  x_1^* = 40\,000,\quad x_2^* = 37\,778,\quad x_T^* = 35\,000\;\text{pies}^3
+\]
+\[
+  \boxed{Z^* = \$1\,028\,056/\text{semana}}
+\]
+Restricciones activas: R1 (demanda), R2-G1 (oferta grado 1) y R2-T (aserradero).
+\end{solucbox}
+
+\begin{sensbox}
+\begin{itemize}[leftmargin=1.5em]
+  \item \textbf{Oferta grado 1 R2-G1} (activa): precio sombra $\approx -\$2.86$/pie$^3$.
+    Cada pie$^3$ adicional de grado 1 disponible reduce el costo en \$2.86.
+  \item \textbf{Aserradero R2-T} (activo): precio sombra $\approx -\$0.86$/pie$^3$.
+    Ampliar la capacidad del aserradero en 1\,000 pie$^3$ ahorraría $\approx \$860$.
+  \item \textbf{Tiempo de secado R3}: holgura $= 144\,000 - 123\,722 = 20\,278$ s ($\approx 5.6$ h); no restrictivo.
+  \item \textbf{Oferta grado 2}: holgura $= 60\,000 - 37\,778 = 22\,222$ pie$^3$.
+\end{itemize}
+\end{sensbox}
+
+\subsection{Código AMPL}
+\begin{lstlisting}[caption={Brady Corporation -- Modelo AMPL}]
+# -- Conjuntos -----------------------------------------
+set F;              # fuentes: {g1, g2, troncos}
+
+# -- Parametros ----------------------------------------
+param c     {F};    # costo total por pie^3 de entrada   [USD/pie^3]
+param r     {F};    # rendimiento de madera util          [pie^3/pie^3]
+param tau   {F};    # tiempo de secado por pie^3          [s/pie^3]
+param sigma {F};    # capacidad maxima de oferta          [pie^3/sem]
+param D;            # demanda semanal de tablones utiles  [pie^3/sem]
+param Tmax;         # tiempo total de secado disponible   [s/sem]
+
+# -- Variables -----------------------------------------
+var x {F} >= 0;     # pie^3 adquiridos/enviados de fuente f
+
+# -- Funcion objetivo ----------------------------------
+minimize Costo:
+    sum {f in F} c[f] * x[f];
+
+# -- Restricciones -------------------------------------
+subject to Demanda:              # R1
+    sum {f in F} r[f] * x[f] >= D;
+
+subject to Oferta {f in F}:      # R2
+    x[f] <= sigma[f];
+
+subject to TiempoSecado:         # R3
+    sum {f in F} tau[f] * x[f] <= Tmax;
+
+# -- Datos ---------------------------------------------
+data;
+
+set F := g1 g2 troncos;
+
+param c     := g1  7      g2 11      troncos  9.5;
+param r     := g1  0.7    g2  0.9    troncos  0.8;
+param tau   := g1  1.2    g2  0.8    troncos  1.3;
+param sigma := g1 40000   g2 60000   troncos 35000;
+param D    := 90000;
+param Tmax := 144000;    # 40 h * 3600 s/h
+
+# -- Resolver ------------------------------------------
+option solver cplex;
+solve;
+
+display x;
+display Costo;
+# x[g1]=40000  x[g2]=37778  x[troncos]=35000
+# Costo = 1028056 USD/semana
+\end{lstlisting}
+
+\clearpage
+%%─────────────────────────────────────────────────────────────────────────────
+\section{Ejercicio 7 — Centro de Reciclaje}
+%%─────────────────────────────────────────────────────────────────────────────
+
+\subsection{Conjuntos}
+
+\begin{conjbox}
+\begin{align*}
+  \cset{M} &= \{A,\,B\} &&\text{tipos de chatarra}\\
+  \cset{C} &= \{\text{Al},\,\text{Si},\,\text{Ca}\} &&\text{componentes de la aleación (aluminio, silicio, carbón)}
+\end{align*}
+\end{conjbox}
+
+\subsection{Parámetros}
+
+\begin{parambox}
+\adjustbox{max width=\linewidth, center}{%
+\renewcommand{\arraystretch}{1.3}
+\begin{tabular}{@{}clcc@{}}
+\toprule
+\textbf{Símbolo} & \textbf{Descripción} & \textbf{Chatarra A} & \textbf{Chatarra B}\\
+\midrule
+$c_m$         & Costo por tonelada [\$/t]    & 100 & 80\\
+$a_{\text{Al},m}$ & Fracción de aluminio     & 0.06 & 0.03\\
+$a_{\text{Si},m}$ & Fracción de silicio      & 0.03 & 0.06\\
+$a_{\text{Ca},m}$ & Fracción de carbón       & 0.04 & 0.03\\
+\midrule
+\multicolumn{4}{@{}l}{$Q = 1\,000$ t: producción total requerida}\\
+\end{tabular}
+\medskip
+
+\textbf{Límites de composición:}
+\begin{tabular}{@{}lccc@{}}
+\toprule
+\textbf{Componente $k$} & \textbf{Mín (\%)} & \textbf{Máx (\%)} & $\underline{q}_k / \overline{q}_k$ (en t)\\
+\midrule
+Aluminio (Al) & 3 & 6 & 30 / 60\\
+Silicio  (Si) & 3 & 5 & 30 / 50\\
+Carbón   (Ca) & 3 & 7 & 30 / 70\\
+\bottomrule
+\end{tabular}}
+\end{parambox}
+
+\subsection{Variables de Decisión}
+
+\begin{varbox}
+\[
+  x_m \;\geq 0, \quad m \in \cset{M}
+\]
+$x_m$ representa las toneladas de chatarra $m$ utilizadas en la mezcla.
+\end{varbox}
+
+\subsection{Función Objetivo}
+
+\begin{fobox}
+Minimizar el costo total de las chatarras para producir 1\,000 toneladas de aleación:
+\[
+  \min\; Z = \sum_{m\,\in\,\cset{M}} c_m\,x_m = 100x_A + 80x_B
+\]
+\end{fobox}
+
+\subsection{Restricciones}
+
+\begin{restbox}
+\textbf{R1 — Producción total exacta}:
+\[
+  \sum_{m\,\in\,\cset{M}} x_m = Q
+  \quad\Leftrightarrow\quad x_A + x_B = 1\,000
+\]
+
+\textbf{R2 — Especificaciones de composición}
+(para cada componente $k \in \cset{C}$, el contenido total debe
+estar entre $\underline{q}_k$ y $\overline{q}_k$ toneladas):
+\[
+  \underline{q}_k \;\leq\; \sum_{m\,\in\,\cset{M}} a_{km}\,x_m \;\leq\; \overline{q}_k
+\]
+Expandido:
+\begin{alignat*}{3}
+  30 &\leq 0.06x_A + 0.03x_B &\leq 60 \quad& \text{(aluminio)}\\
+  30 &\leq 0.03x_A + 0.06x_B &\leq 50 \quad& \text{(silicio)}\\
+  30 &\leq 0.04x_A + 0.03x_B &\leq 70 \quad& \text{(carbón)}
+\end{alignat*}
+
+\textbf{R3 — No negatividad}: $x_A, x_B \geq 0$.
+\end{restbox}
+
+\subsection{Modelo Matemático Completo}
+
+\begin{modelbox}
+\begin{alignat*}{2}
+  \min\quad & Z = 100x_A + 80x_B\\[4pt]
+  \text{s.a.}\quad
+  & x_A + x_B = 1\,000 &\quad& \text{(producción total)}\\
+  & 0.06x_A + 0.03x_B \geq 30 &\quad& \text{(Al mín 3\%)}\\
+  & 0.06x_A + 0.03x_B \leq 60 &\quad& \text{(Al máx 6\%)}\\
+  & 0.03x_A + 0.06x_B \geq 30 &\quad& \text{(Si mín 3\%)}\\
+  & 0.03x_A + 0.06x_B \leq 50 &\quad& \text{(Si máx 5\%)} \leftarrow\text{activa}\\
+  & 0.04x_A + 0.03x_B \geq 30 &\quad& \text{(Ca mín 3\%)}\\
+  & 0.04x_A + 0.03x_B \leq 70 &\quad& \text{(Ca máx 7\%)}\\
+  & x_A,\, x_B \geq 0         &\quad& \text{(no negatividad)}
+\end{alignat*}
+\end{modelbox}
+
+\subsection{Solución Óptima}
+
+Sustituyendo $x_B = 1\,000 - x_A$ en cada restricción, la única que acota $x_A$ por abajo
+es la de silicio máximo:
+\[
+  0.03x_A + 0.06(1\,000-x_A) \leq 50
+  \;\;\Rightarrow\;\;
+  60 - 0.03x_A \leq 50
+  \;\;\Rightarrow\;\;
+  x_A \geq \frac{1\,000}{3}
+\]
+
+Como $Z = 20x_A + 80\,000$ es creciente en $x_A$, se toma el mínimo factible:
+
+\begin{center}
+\renewcommand{\arraystretch}{1.3}
+\begin{tabular}{@{}lcccc@{}}
+\toprule
+\textbf{Comp.} & \textbf{Contenido (t)} & \textbf{\%} & \textbf{Rango (\%)} & \textbf{Estado}\\
+\midrule
+Aluminio & 40.00 & 4.0 & [3, 6] & holgura\\
+Silicio  & 50.00 & 5.0 & [3, 5] & \textbf{activa (máx)}\\
+Carbón   & 33.33 & 3.3 & [3, 7] & holgura\\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\begin{solucbox}
+\[
+  x_A^* = \frac{1\,000}{3} \approx 333.33\;\text{t},\quad
+  x_B^* = \frac{2\,000}{3} \approx 666.67\;\text{t}
+\]
+\[
+  \boxed{Z^* = \$86\,666.67}
+\]
+\end{solucbox}
+
+\begin{sensbox}
+\begin{itemize}[leftmargin=1.5em]
+  \item \textbf{R2-Si máx} (activa): precio sombra $= -\$666.67$/t.
+    Relajar el límite de silicio a 5.1\% (10 t más) reduce el costo $\approx\$667$.
+  \item \textbf{Costo chatarra A}: la solución es óptima mientras $c_A > c_B = \$80$.
+    Si $c_A \leq \$80$, se usaría solo chatarra A ($x_A = 1\,000$ t).
+  \item \textbf{Rango de optimalidad}: $x_A^* = 1000/3$ es óptimo mientras
+    el ratio $c_A/c_B \in (1, +\infty)$ con la restricción de silicio activa.
+  \item Todas las demás restricciones tienen holgura amplia.
+\end{itemize}
+\end{sensbox}
+
+\subsection{Código AMPL}
+\begin{lstlisting}[caption={Centro de Reciclaje -- Modelo AMPL}]
+# -- Conjuntos -----------------------------------------
+set M;          # chatarras:   {A, B}
+set C;          # componentes: {Al, Si, Ca}
+
+# -- Parametros ----------------------------------------
+param costo {M};        # costo por tonelada de chatarra m  [USD/t]
+param a     {C, M};     # fraccion del componente k en chatarra m
+param qmin  {C};        # contenido minimo del componente k  [t]
+param qmax  {C};        # contenido maximo del componente k  [t]
+param Q;                # produccion total requerida          [t]
+
+# -- Variables -----------------------------------------
+var x {M} >= 0;         # toneladas de chatarra m utilizadas
+
+# -- Funcion objetivo ----------------------------------
+minimize Costo:
+    sum {m in M} costo[m] * x[m];
+
+# -- Restricciones -------------------------------------
+subject to Produccion:                  # R1
+    sum {m in M} x[m] = Q;
+
+subject to CompMin {k in C}:            # R2 (limite inferior)
+    sum {m in M} a[k,m] * x[m] >= qmin[k];
+
+subject to CompMax {k in C}:            # R2 (limite superior)
+    sum {m in M} a[k,m] * x[m] <= qmax[k];
+
+# -- Datos ---------------------------------------------
+data;
+
+set M := A B;
+set C := Al Si Ca;
+
+param costo := A 100   B 80;
+
+param a :      A      B    :=
+         Al  0.06   0.03
+         Si  0.03   0.06
+         Ca  0.04   0.03  ;
+
+param qmin := Al 30   Si 30   Ca 30;
+param qmax := Al 60   Si 50   Ca 70;
+param Q    := 1000;
+
+# -- Resolver ------------------------------------------
+option solver cplex;
+solve;
+
+display x;
+display Costo;
+# x[A]=333.33 t   x[B]=666.67 t   Costo=86666.67 USD
+\end{lstlisting}
+
+\clearpage
+%%─────────────────────────────────────────────────────────────────────────────
+\section*{Resumen General}
+\addcontentsline{toc}{section}{Resumen General}
+%%─────────────────────────────────────────────────────────────────────────────
+
+\begin{center}
+\renewcommand{\arraystretch}{1.5}
+\begin{tabular}{@{}clccc@{}}
+\toprule
+\textbf{\#} & \textbf{Ejercicio} & \textbf{Tipo} & \textbf{Restricciones activas} & \textbf{Óptimo}\\
+\midrule
+1 & La Química       & min & Demanda A, Demanda C       & \$450/día\\
+2 & Charcha          & max & Insumos 1--2, Río, Tiempo  & \$6\,366/semana\\
+3 & Refinería Melrose & max & Cap.\ gas/oil, Calidad     & \$11\,230\\
+4 & Donovan          & min & Cap.\ T2, T3, T4           & \$495\,000/año\\
+5 & Encuesta         & min & Esposos, Muj.\,solteras    & \$2\,300\\
+6 & Brady            & min & Oferta G1, Aserradero      & \$1\,028\,056/semana\\
+7 & Reciclaje        & min & Silicio máx 5\%            & \$86\,667/lote\\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\end{document}

@@ -1,0 +1,8 @@
+model camiones.mod;
+data camiones.dat;
+
+option solver cplex;
+solve;
+
+display x;
+display Cost;

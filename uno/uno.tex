@@ -1,0 +1,272 @@
+\documentclass{article}
+\usepackage{diagbox}
+\usepackage{enumitem}
+\usepackage{amssymb}
+
+% Preamble
+\title{Ejercicios de optimización 1}
+\author{Bastián Ibañez Martíenz}
+\date{24/03/2026}
+
+\begin{document}
+\maketitle
+\newpage
+
+\section*{2.7 Problema de transporte}
+
+Daar S. A. es un fabricante de teléfonos móviles de MioXi de última
+tecnología. La empresa tiene dos plantas de producción, una en Cali y otra
+en Medellín, además, tiene un almacén ubicado en Bogotá. Daar vende
+sus teléfonos en seis mercados: Pasto (PSO), Medellín (MDE), Cartagena
+(CTG), Cali (CLO), Manizales (MZL) y Bogotá (Btá). \bigskip
+
+Para satisfacer la demanda semanal del mercado, la gerente de distribución
+debe determinar un plan para el envío desde las plantas y su almacén
+hacia los distintos mercados, al mínimo costo. Ella tiene conocimiento de
+que existen 600 unidades de MioXi disponibles para ser enviados desde la
+planta de Cali, 600 desde la planta de Medellín y 250 desde el almacén
+en Bogotá. El plan de envío no puede sobrepasar estos valores desde las
+plantas y el almacén. \bigskip
+
+Las demandas del mercado se indican en la Tabla 2.4, junto con el costo de
+transporte asociado al envío de una unidad de teléfono MioXi. \bigskip
+
+\begin{tabular}{|c|cccccc|}
+\hline
+& \multicolumn{6}{c|}{Destinos} \\
+\cline{2-7}
+Origen & PSO & MDE & CTG & CLO & MZL & BTA \\
+\hline
+Planta 1 Cali & 13150 & 9650 & 19950 & 5000 & 9650 & 15950 \\
+Planta 2 Medellín & 19950 & 6500 & 19950 & 9650 & 11150 & 15950 \\
+Almacén Bogotá & 17150 & 15950 & 19950 & 15950 & 15950 & 7000 \\
+\hline
+Demanda & 280 & 250 & 240 & 170 & 210 & 300 \\
+\hline
+\end{tabular} \bigskip
+
+\begin{enumerate}[label=\alph*.]
+    \item Verificar la viabilidad del problema de transporte de Daar, es decir,
+¿la oferta será suficiente para satisfacer la demanda total?
+    \item Formular un modelo matemático que asegure un costo de transporte
+total mínimo al realizar los envíos de teléfonos MioXi desde las
+plantas y el almacén, hacia los mercados.
+\end{enumerate}
+
+\subsection*{Definición de conjuntos}
+\begin{itemize}
+    \item I: Nodos de origen \{1,2,3\}
+    \item J: Mercados \{1,2,3,4,5,6\}
+\end{itemize}
+
+\subsection*{Definición de Parámetros}
+\begin{itemize}
+    \item $c_{ij}$: Costo de transporter un teléfono desde el Origen $i \in I$ al mercado $j \in J$
+    \item $o_{i}$: Oferta disponible en el origen $i \in I$
+    \item $d_{i}$: Demanda en el mercado $j \in J$
+\end{itemize}
+
+\subsection*{Variables de decisión}
+\begin{itemize}
+    \item $X_{ij}$: Unidades de teléfonos $X$ a enviar el Origen $i \in I$ al mercado $j \in J$
+\end{itemize}
+
+\subsection*{Modelo algebráico}
+
+Minimizar $\sum\limits_{i \in I}\sum\limits_{j \in J} c_{ij}*X_{ij}$ \bigskip
+
+Sujeto a:
+\begin{enumerate}
+    \item $\sum\limits_{j \in J} X_{ij} \leq o{ij}, \hfill \forall i \in I$
+    \item $\sum\limits_{i \in I} X_{ij} \geq d{ij}, \hfill \forall j \in J$
+    \item $X_{ij} \in \mathbb{Z^+} \cup \{0\}, \hfill \forall i \in I, \forall j \in J$ 
+\end{enumerate} 
+
+\newpage
+\section*{2.9 Problema del restaurante italiano}
+
+Un restaurante italiano cuenta con cinco especialidades i en su menú:
+tallarines, ravioles, lasaña, corbatitas y fideos. Cada una genera distintas
+utilidades ui en dólares y tiene una demanda máxima diaria de especialidades
+di. Ambos son datos estimados mediante un estudio de mercado, que se
+resume en la Tabla \bigskip
+
+\begin{tabular}{|c|ccccc|}
+\hline
+Especialidades & Tallarines & Ravioles & Lasaña & Corbatitas & Fideos \\
+\hline
+Utilidad [USD] & 50 & 65 & 40 & 70 & 55 \\
+Demanda [und] & 15 & 12 & 32 & 18 & 10 \\
+\hline
+\end{tabular}
+\bigskip
+
+Cada especialidad i puede estar compuesta por los siguientes j ingredientes:
+tomate, cebolla, huevo y pimiento. Así, cada especialidad i requiere cantidades
+diferentes de ingredientes j para su elaboración (aij), como muestra la Tabla 2.7.
+\bigskip
+
+\begin{tabular}{|c|cccc|}
+\hline
+& Tomate & Cebolla & Huevo & Pimiento \\
+\hline
+Tallarines & 1 & 1 & 0 & 1 \\
+Ravioles & 4 & 2 & 0 & 1 \\
+Lasaña & 2 & 1 & 1 & 2 \\
+Corbatitas & 0 & 0 & 2 & 0 \\
+Fideos & 1 & 1 & 0 & 1 \\
+\hline
+\end{tabular}
+
+\subsection*{Definición de conjuntos}
+\begin{itemize}
+    \item I: Especialidades \{1,2,3,4,5\}
+    \item J: Ingredientes frescos \{1,2,3,4\}
+\end{itemize}
+
+\subsection*{Definición de parámetros}
+\begin{itemize}
+    \item $u_{i}$: Utilidad de la especialidad $i \in I$
+    \item $d_{i}$: Demanda de la especialidad $i \in I$
+    \item $a_{ij}$: Cantidad de ingredientes $j \in J$ requeridos para preparar la especialidad $i \in I$
+    \item $m_{j}$: Cantidad disponible del ingrediente $j \in J$
+\end{itemize}
+
+\subsection*{Definición de variables de decisión}
+\begin{itemize}
+    \item $X_{i}$: Numero de especialidad diaria $i \in I$ a producir
+\end{itemize}
+
+\subsection*{Modelo algebráico}
+Maximizar z = $u_{i} * X_{i}$ \bigskip
+Sujeto a: \bigskip
+\begin{enumerate}
+    \item $\sum\limits_{i \in I} X_{i} * a_{ij} < m_{j}, \hfill \forall j \in J$
+    \item $X_{i} \leq d_{i}, \hfill \forall i \in I$
+    \item $X_{i} \in \mathbb{Z^+} \cup \{0\}, \hfill \forall i \in I$
+\end{enumerate}
+
+\section*{2.11 Problema de compra de zapatos}
+Zapato a tu medida es una empresa de zapatos que cuenta con un
+presupuesto de 50 000 USD para un proyecto de innovación. Para ello,
+acude a 2 proveedores: Nikis y Pinki. Debido a que es una compra al por
+mayor, ambos proveedores venden los zapatos en paquetes (cajas) de varias
+unidades, que pueden variar dependiendo del tipo de zapato. La empresa
+desea comprar la misma cantidad de cajas a ambos proveedores, pero la
+compra debe ser de mínimo 30 cajas en total. Adicionalmente, la empresa
+busca que el total de pares de zapatos generados por la compra de las cajas
+sea al menos de 250 pares. \bigskip
+
+En la Tabla 2.13 se observan los datos de costos, número de pares
+de zapatos por caja y la utilidad que generaría para cada paquete y
+fabricante, respectivamente. \bigskip
+
+\begin{tabular}{|c|cccc|}
+\hline
+Cajaj & Fabricante & Costo [USD] & Número de pares de zapatos & Utilidad por caja [USD/caja] \\
+\hline
+Tenis & Nikis & 2700 & 45 & 4500 \\
+Botín & Nikis & 2400 & 30 & 2550 \\
+Tacones & Pinki & 640 & 16 & 960 \\
+Sandalias & Pinki & 625 & 25 & 1250 \\
+\hline
+\end{tabular}
+
+¿Cuántas cajas de zapatos debe comprar para obtener la máxima utilidad?
+
+\subsection*{Definición de conjuntos}
+\begin{itemize}
+    \item I: Tipo de caja \{1,2,3,4\}
+\end{itemize}
+
+\subsection*{Definición de parámetros}
+\begin{itemize}
+    \item $c_{i}$: Costo de la caja $i \in I$
+    \item $o_{i}$: Número de pares de zapatos en la caja $i \in I$
+    \item $u_{i}$: Utilidad por caja de la caja $i \in I$
+\end{itemize}
+
+\subsection*{Definición de variables de decisión}
+\begin{itemize}
+    \item $x_{i}$: Unidades a comprar de la caja $i \in I$
+\end{itemize}
+
+\subsection*{Modelo algebráico}
+
+Maximizar: $\sum\limits_{i \in I} u_{i}*x_{i}$ \\
+Sujeto a:
+\begin{enumerate}
+    \item $\sum\limits_{i \in I} x_i * c_i \leq 50000$
+    \item $\sum\limits_{i \in I} x_i \geq 30$
+    \item $\sum\limits_{i=1}^2 x_i = \sum\limits_{i=3}^4 x_i$
+    \item $\sum\limits_{i \in I} x_i * o_i \geq 250$
+    \item $x_i \in \mathbb{Z^+} \cup \{0\}, \hfill \forall i \in I$
+
+\end{enumerate}
+
+\newpage
+\section*{3.3 Problema del inventario de tapabocas}
+
+Una empresa distribuidora de tapabocas tiene la siguiente demanda
+pronosticada para los próximos cuatro meses: 2 800, 2 200, 3 200 y 2 500 unidades
+para los meses 1, 2, 3 y 4, respectivamente. La empresa tiene capacidad
+para producir 2 700 unidades de tapabocas por mes, en sus turnos normales.
+Utilizando tiempo extra, es posible fabricar 300 unidades adicionales. La
+producción en tiempo extra tiene un sobrecosto de 10 USD por unidad. \bigskip
+La administración ha estimado un costo de almacenamiento de 2 USD por
+unidad producida y que no sea vendida en un mes determinado, como se
+muestra a continuación: \\\\
+\begin{center}
+    $\frac{USD}{uni*mes} $
+\end{center}
+¿Cuál es el programa óptimo de producción que minimice los costos de
+producción en tiempo extra y almacenamiento, cumpliendo la demanda de
+tapabocas cada mes? Asumir que la cantidad en existencia actual es 0 y se
+desea un inventario final del periodo también igual a 0.
+
+\subsection*{Datos}
+\begin{itemize}
+    \item 4 meses
+    \item 2700 capacidad normal
+    \item 300 capacidad extra a \$10/unidad
+    \item Costo de almacenamiento \$2/unidad no vendida
+\end{itemize}
+
+\subsection*{Definición de conjuntos}
+\begin{itemize}
+    \item T: Mes de producción \{1,2,3,4\}
+\end{itemize}
+
+\subsection*{Definición de parámetros}
+\begin{itemize}
+    \item $d_t$: Demanda proyectada para el mes $t \in T$
+    \item $h$: Costo de inventario
+    \item $p_e$: Costo de producción de tapabocas en tiempo extra
+    \item $cap$: Capacidad de producción en tiempo regular
+    \item $cap_e$: Capacidad de producción en tiempo extra
+\end{itemize}
+
+\subsection*{Definición de variables de decisión}
+\begin{itemize}
+    \item $x_t$: Unidades a producir en tiempo regular, $t\in T$
+    \item $e_t$: Unidades a producir en tiempo extra, $t\in T$
+    \item $i_t$: Unidades a tener en inventario, $t\in T \cup \{0\}$ 
+\end{itemize}
+
+\subsection*{Restricciones}
+\begin{itemize}
+    \item $x_t \leq cap$
+    \item $e_t \leq cap_e$
+    \item $x_t + e_t \geq d_t$  
+\end{itemize}
+
+\subsection*{Modelo algebráico}
+Minimizar z: $\sum\limits_{t \in T} i_t*h + p_e * e_t$ \\
+Sujeto a: \\
+$x_t \leq cap, \hfill \forall t \in T$ \\
+$e_t \leq cap_e, \hfill \forall t \in T$ \\
+$i_{t-1} + x_t + e_t \geq d_t, \hfill \forall t \in T$ \\
+$x_t, e_t, \in \mathbb{Z^+} \cup \{0\}$ \\
+
+
+\end{document}

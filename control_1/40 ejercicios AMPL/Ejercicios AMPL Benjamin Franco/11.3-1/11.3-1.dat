@@ -1,0 +1,14 @@
+param costo_arranque :=
+    1    50000
+    2    40000
+    3    70000
+    4    60000;
+
+param ingreso_marginal :=
+    1    70
+    2    60
+    3    90
+    4    80;
+
+param M := 99999;
+param M_prod_large := 3000; 

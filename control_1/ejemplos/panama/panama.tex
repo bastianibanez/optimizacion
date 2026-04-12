@@ -1,0 +1,131 @@
+\documentclass[12pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[spanish]{babel}
+\usepackage{amsmath, amssymb}
+\usepackage{booktabs}
+\usepackage{geometry}
+\geometry{margin=2.5cm}
+
+\title{Problema de Panam\'a --- Explicaci\'on Detallada}
+\author{}
+\date{}
+
+\begin{document}
+\maketitle
+
+\section{Contexto}
+
+4 personas viajan a Panam\'a a comprar electr\'onicos para revenderlos en Colombia. El negocio es simple: compran barato all\'a y venden m\'as caro ac\'a.
+
+\begin{table}[h]
+\centering
+\begin{tabular}{lccc}
+\toprule
+\textbf{Artefacto} & \textbf{Precio compra} & \textbf{Precio venta} & \textbf{Ganancia unitaria} \\
+\midrule
+Televisor      & 250.000 & 400.000 & \textbf{150.000} \\
+Equipo sonido  & 180.000 & 270.000 & \textbf{90.000}  \\
+Aspirador      &  70.000 & 130.000 & \textbf{60.000}  \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Las limitaciones son:
+\begin{itemize}
+    \item \textbf{Presupuesto total:} 3.000.000 COP entre los 4.
+    \item \textbf{Aduana:} m\'aximo 12 artefactos \textbf{por persona}.
+\end{itemize}
+
+\section{Modelado paso a paso}
+
+\subsection{Conjuntos --- \textquestiondown Qui\'enes deciden?}
+
+\[
+    i \in \{1, 2, 3, 4\}
+\]
+
+Cada persona es un \'indice. Se necesita porque la restricci\'on de aduana aplica \textbf{a cada una individualmente}.
+
+\subsection{Variables --- \textquestiondown Qu\'e decidimos?}
+
+Para cada persona $i$: cu\'antos televisores ($x_i$), equipos de sonido ($y_i$) y aspiradores ($z_i$) compra. Son enteras porque no puedes comprar 2.7 televisores.
+
+\[
+    x_i,\; y_i,\; z_i \in \mathbb{Z}_{\geq 0}
+\]
+
+\subsection{Funci\'on objetivo --- \textquestiondown Qu\'e queremos?}
+
+Maximizar la ganancia total. La ganancia es \texttt{precio\_venta $-$ precio\_compra} por cada unidad:
+
+\[
+    \text{Max } Z = 150\,000\sum_{i=1}^{4}x_i + 90\,000\sum_{i=1}^{4}y_i + 60\,000\sum_{i=1}^{4}z_i
+\]
+
+Las sumatorias $\sum_{i=1}^{4}$ suman lo de las 4 personas, porque la ganancia total es de todos juntos.
+
+\subsection{Restricci\'on de presupuesto --- El dinero es compartido}
+
+\[
+    250\,000\sum_{i=1}^{4}x_i + 180\,000\sum_{i=1}^{4}y_i + 70\,000\sum_{i=1}^{4}z_i \leq 3\,000\,000
+\]
+
+Se usa $\sum$ porque el presupuesto es \textbf{global} (los 4 comparten la plata). No importa qui\'en compra qu\'e, el total no puede superar 3M.
+
+\subsection{Restricci\'on de aduana --- Individual por persona}
+
+\[
+    x_i + y_i + z_i \leq 12, \quad \forall\, i = 1, 2, 3, 4
+\]
+
+\textbf{NO} hay sumatoria porque aplica a \textbf{cada persona por separado}. El $\forall i$ genera 4 restricciones distintas:
+\begin{align*}
+    x_1 + y_1 + z_1 &\leq 12 \\
+    x_2 + y_2 + z_2 &\leq 12 \\
+    x_3 + y_3 + z_3 &\leq 12 \\
+    x_4 + y_4 + z_4 &\leq 12
+\end{align*}
+
+\subsection{Restricciones de integridad}
+
+\[
+    x_i,\; y_i,\; z_i \in \mathbb{Z}_{\geq 0}
+\]
+
+\section{Modelo matem\'atico completo}
+
+\[
+    \text{Max } Z = 150\,000\sum_{i=1}^{4}x_i + 90\,000\sum_{i=1}^{4}y_i + 60\,000\sum_{i=1}^{4}z_i
+\]
+
+Sujeto a:
+
+\begin{align}
+    250\,000\sum_{i=1}^{4}x_i + 180\,000\sum_{i=1}^{4}y_i + 70\,000\sum_{i=1}^{4}z_i &\leq 3\,000\,000 \\[6pt]
+    x_i + y_i + z_i &\leq 12, \quad \forall\, i = 1, 2, 3, 4 \\[6pt]
+    x_i,\; y_i,\; z_i &\in \mathbb{Z}_{\geq 0}
+\end{align}
+
+\section{Intuici\'on clave}
+
+Este problema tiene una distinci\'on fundamental:
+
+\begin{table}[h]
+\centering
+\begin{tabular}{llcl}
+\toprule
+\textbf{Restricci\'on} & \textbf{Alcance} & \textbf{\textquestiondown Se usa $\sum_i$?} & \textbf{\textquestiondown Por qu\'e?} \\
+\midrule
+Presupuesto & Global (compartido) & S\'i & Los 4 comparten la plata \\
+Aduana & Individual (por persona) & No ($\forall i$) & Cada uno pasa solo por la aduana \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Esa diferencia entre restricciones \textbf{globales} (con $\sum$) y \textbf{por \'indice} (con $\forall$) es un patr\'on que aparece en muchos problemas.
+
+\section{Observaci\'on sobre la estructura}
+
+En este problema particular, como la ganancia y el presupuesto solo dependen del \textbf{total} comprado (no de qui\'en compra qu\'e), las personas son intercambiables. La soluci\'on \'optima simplemente reparte los 12 artefactos por persona de forma que maximice ganancia sin pasarse del presupuesto global. Pero el modelado con \'indice $i$ es necesario porque la restricci\'on de aduana s\'i distingue entre personas.
+
+\end{document}

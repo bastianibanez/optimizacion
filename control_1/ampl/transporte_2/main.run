@@ -1,0 +1,8 @@
+model main.mod
+data main.dat
+option solver cplex;
+
+solve;
+
+display x;
+display Cost;

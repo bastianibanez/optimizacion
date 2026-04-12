@@ -1,0 +1,17 @@
+set MAQUINAS := Fresadora Torno Rectificadora;
+set PRODUCTOS := Producto1 Producto2 Producto3;
+
+param tiempo_disponible :=
+    Fresadora    500
+    Torno        350
+    Rectificadora 150;
+
+param coef_productividad: Producto1 Producto2 Producto3 :=
+    Fresadora    9    3    5
+    Torno        5    4    0
+    Rectificadora 3    0    3;
+
+param ganancia_unitaria :=
+    Producto1    50
+    Producto2    20
+    Producto3    25;

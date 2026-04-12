@@ -1,0 +1,17 @@
+PWD /Users/bastianibanez/sem1-2026/optimizacion/control_1/ejemplos/nutricion-deportiva
+INPUT /usr/local/texlive/2026/texmf.cnf
+INPUT /usr/local/texlive/2026/texmf-dist/web2c/texmf.cnf
+INPUT /usr/local/texlive/2026/texmf-var/web2c/pdftex/pdflatex.fmt
+INPUT /Users/bastianibanez/sem1-2026/optimizacion/control_1/ejemplos/nutricion-deportiva/scratch.tex
+OUTPUT scratch.log
+INPUT /usr/local/texlive/2026/texmf-dist/tex/latex/base/article.cls
+INPUT /usr/local/texlive/2026/texmf-dist/tex/latex/base/article.cls
+INPUT /usr/local/texlive/2026/texmf-dist/tex/latex/base/size12.clo
+INPUT /usr/local/texlive/2026/texmf-dist/tex/latex/base/size12.clo
+INPUT /usr/local/texlive/2026/texmf-dist/tex/latex/base/size12.clo
+INPUT /usr/local/texlive/2026/texmf-dist/fonts/map/fontname/texfonts.map
+INPUT /usr/local/texlive/2026/texmf-dist/fonts/tfm/public/cm/cmr12.tfm
+INPUT /usr/local/texlive/2026/texmf-dist/tex/latex/base/inputenc.sty
+INPUT /usr/local/texlive/2026/texmf-dist/tex/latex/base/inputenc.sty
+INPUT /usr/local/texlive/2026/texmf-dist/fonts/tfm/public/cm/cmr17.tfm
+INPUT /usr/local/texlive/2026/texmf-dist/fonts/tfm/public/cm/cmbx12.tfm

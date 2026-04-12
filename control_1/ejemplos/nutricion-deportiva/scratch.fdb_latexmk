@@ -1,0 +1,20 @@
+# Fdb version 4
+["pdflatex"] 1773712572.37039 "/Users/bastianibanez/sem1-2026/optimizacion/control_1/ejemplos/nutricion-deportiva/scratch.tex" "scratch.pdf" "scratch" 1773712572.61458 2
+  "/Users/bastianibanez/sem1-2026/optimizacion/control_1/ejemplos/nutricion-deportiva/scratch.tex" 1773712571.75827 119 76d7d9d58fec6fde9752e75c0561db21 ""
+  "/usr/local/texlive/2026/texmf-dist/fonts/map/fontname/texfonts.map" 1577235249 3524 cb3e574dea2d1052e39280babc910dc8 ""
+  "/usr/local/texlive/2026/texmf-dist/fonts/tfm/public/cm/cmbx12.tfm" 1136768653 1324 c910af8c371558dc20f2d7822f66fe64 ""
+  "/usr/local/texlive/2026/texmf-dist/fonts/tfm/public/cm/cmr12.tfm" 1136768653 1288 655e228510b4c2a1abe905c368440826 ""
+  "/usr/local/texlive/2026/texmf-dist/fonts/tfm/public/cm/cmr17.tfm" 1136768653 1292 296a67155bdbfc32aa9c636f21e91433 ""
+  "/usr/local/texlive/2026/texmf-dist/tex/latex/base/article.cls" 1748806692 20144 b966087dda3b194755eb460d32e2ef75 ""
+  "/usr/local/texlive/2026/texmf-dist/tex/latex/base/inputenc.sty" 1738182759 5048 0270515b828149155424600fd2d58ac5 ""
+  "/usr/local/texlive/2026/texmf-dist/tex/latex/base/size12.clo" 1748806692 8449 8dc66c6c313c8eb2d774af83bca435dd ""
+  "/usr/local/texlive/2026/texmf-dist/web2c/texmf.cnf" 1770478701 43630 e9fa012910491fe5ae08a72c3c2997a7 ""
+  "/usr/local/texlive/2026/texmf-var/web2c/pdftex/pdflatex.fmt" 1772409757 3636768 9f94d239f422c02416e379a36a852ffd ""
+  "/usr/local/texlive/2026/texmf.cnf" 1772409725 577 648cd9f92f9c0eac486f4c71c85cfbbe ""
+  "scratch.aux" 0 -1 0 "pdflatex"
+  "scratch.tex" 1773712571.75827 119 76d7d9d58fec6fde9752e75c0561db21 ""
+  (generated)
+  "scratch.aux"
+  "scratch.log"
+  "scratch.pdf"
+  (rewritten before read)

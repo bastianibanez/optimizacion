@@ -1,0 +1,41 @@
+# Costos por porcion (COP)
+# LE=1, H=2, P=3, A=4, F=5, Z=6, M=7, N=8, Mant=9
+param c :=
+    1   660
+    2  1180
+    3  2100
+    4   950
+    5   560
+    6   440
+    7  1440
+    8   400
+    9   800
+;
+
+# Requerimientos minimos diarios (Tabla 2.9)
+# j=1 Proteina(g), 2 Lipidos(g), 3 Hidr.carb(g),
+#   4 VitA(ug), 5 VitC(mg), 6 Folato(mg), 7 Calcio(mg), 8 Hierro(mg)
+param d :=
+    1    65
+    2    66
+    3   362
+    4   700
+    5    75
+    6   400
+    7  1000
+    8    18
+;
+
+# Aporte nutricional a[alimento, nutriente] (Tabla 2.10)
+param a:
+        1     2     3     4    5     6    7    8 :=
+    1   3.3  13.5  20.6   6.4  12.2   0.9   0.3   0.7
+    2   3.2  10     1.6   0.8   0.3   0.5   0.3   0.3
+    3   4.8   4    57.3  79.7  74.6   8.1  14.5   8.7
+    4   91  226    85     0     0  1346     4    40
+    5   4.5   0    26     0     0     6    10    50
+    6   14   51.2  88    12     4    10     5    37
+    7  123  100   260    14    24    41     6    36
+    8   0.1   2.4   2    0.8   3.6   0.7   0.4   0.3
+    9   0    82.9   0    5.6   0     0     3     0
+;

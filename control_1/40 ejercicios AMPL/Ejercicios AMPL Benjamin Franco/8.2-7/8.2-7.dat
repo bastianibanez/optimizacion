@@ -1,0 +1,22 @@
+set ORIGINS := 1 2 3;
+set DESTINATIONS := 1 2 3 4;
+
+param supply :=
+1 5
+2 2
+3 3
+;
+
+param demand :=
+1 3
+2 3
+3 2
+4 2
+;
+
+param cost:
+   1 2 3 4 :=  
+1  3 7 6 4    
+2  2 4 3 2    
+3  4 3 8 5    
+;

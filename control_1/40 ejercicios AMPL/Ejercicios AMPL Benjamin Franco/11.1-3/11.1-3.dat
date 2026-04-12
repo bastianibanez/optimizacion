@@ -1,0 +1,15 @@
+param ganancia :=
+1  1
+2  1.8
+3  1.6
+4  0.8
+5  1.4;
+
+param capital_requerido :=
+1  6
+2  12
+3  10
+4  4
+5  8;
+
+param capital_disponible = 20;

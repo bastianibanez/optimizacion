@@ -1,0 +1,14 @@
+\babel@toc {spanish}{}\relax 
+\contentsline {section}{\numberline {1}Antes de Modelar: \textquestiondown Qu\'e tipo de problema es este?}{2}{}%
+\contentsline {section}{\numberline {2}El Problema: Descripci\'on Completa}{2}{}%
+\contentsline {section}{\numberline {3}Paso 1 --- Identificar los Conjuntos}{3}{}%
+\contentsline {section}{\numberline {4}Paso 2 --- Identificar los Par\'ametros}{4}{}%
+\contentsline {section}{\numberline {5}Paso 3 --- Definir las Variables de Decisi\'on}{5}{}%
+\contentsline {section}{\numberline {6}Paso 4 --- Funci\'on Objetivo: \textquestiondown Qu\'e minimizamos?}{6}{}%
+\contentsline {section}{\numberline {7}Paso 5 --- Restricciones Nutricionales: M\'inimos que cumplir}{6}{}%
+\contentsline {section}{\numberline {8}El Modelo Extendido (Expl\'icito)}{7}{}%
+\contentsline {section}{\numberline {9}El Modelo Algebraico (Forma Compacta)}{8}{}%
+\contentsline {section}{\numberline {10}C\'odigo AMPL}{10}{}%
+\contentsline {section}{\numberline {11}Soluci\'on \'Optima (CPLEX)}{10}{}%
+\contentsline {section}{\numberline {12}Comparaci\'on Final: Dieta vs.\ Panam\'a}{11}{}%
+\contentsline {section}{\numberline {13}Resumen de Lecciones de Modelado}{11}{}%
