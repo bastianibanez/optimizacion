@@ -1,0 +1,12 @@
+set INSUMO := 1 2;
+set PRODUCTO := A B;
+set PROCESO_INSUMO := 1 2;
+set PROCESO_PRODUCTO
+
+param costo_mp := 6;
+
+param rendimiento_insumo := 
+  1  2
+  2  3
+
+

@@ -352,12 +352,12 @@ display Costo;
 \subsection{Variables de Decisión}
 
 \begin{varbox}
-\begin{align*}
-  m_i &\geq 0,\quad i \in \cset{I} &&\text{libras de MP destinadas al insumo }i\\
-  p_j &\geq 0,\quad j \in \cset{J} &&\text{ejecuciones del proceso }j\\
-  y_k &\geq 0,\quad k \in \{C,D\}  &&\text{oz del producto }k\text{ producidas}\\
-  w   &\geq 0 &&\text{oz de desecho derramado al río}
-\end{align*}
+\begin{itemize}[leftmargin=1.5em]
+  \item $m_i \geq 0$: libras de MP destinadas al insumo $i \in \mathcal{I}$.
+  \item $p_j \geq 0$: ejecuciones del proceso $j \in \mathcal{J}$.
+  \item $y_k \geq 0$: oz del producto $k \in \{C, D\}$ producidas.
+  \item $w \geq 0$: oz de desecho derramado al río.
+\end{itemize}
 \end{varbox}
 
 \subsection{Función Objetivo}
@@ -526,29 +526,32 @@ display Utilidad;
 \subsection{Conjuntos}
 
 \begin{conjbox}
-\begin{align*}
-  \cset{M} &= \{1,\,2,\,3\} &&\text{métodos de procesamiento de crudo}\\
-  \cset{G} &= \{6,\,8,\,10\} &&\text{grados de crudo}\\
-  \cset{P} &= \{\text{gas},\,\text{oil}\} &&\text{productos finales (gasolina, fuel oil)}
-\end{align*}
+\begin{itemize}[leftmargin=1.5em]
+  \item $\mathcal{M}$: métodos de procesamiento de crudo $\{1, 2, 3\}$.
+  \item $\mathcal{G}$: grados de crudo $\{6, 8, 10\}$.
+  \item $\mathcal{P}$: productos finales $\{\text{gas}, \text{oil}\}$ (gasolina, fuel oil).
+\end{itemize}
 \end{conjbox}
 
 \subsection{Parámetros}
 
 \begin{parambox}
-\adjustbox{max width=\linewidth, center}{%
-\renewcommand{\arraystretch}{1.3}
-\begin{tabular}{@{}clcccc@{}}
-\toprule
-\textbf{Símbolo} & \textbf{Descripción} & \textbf{Mét.\ 1} & \textbf{Mét.\ 2} & \textbf{Mét.\ 3} & \textbf{Unidad}\\
-\midrule
-$r_{g,m}$  & Rendimiento grado $g$ por barril & \text{ver tabla} & & & bbl/bbl\\
-$k_m$      & Costo de procesamiento          & 3.4 & 3.0 & 2.6 & USD/bbl\\
-\bottomrule
-\end{tabular}}
+\begin{itemize}[leftmargin=1.5em]
+  \item $r_{gm}$: rendimiento del grado $g \in \mathcal{G}$ por barril procesado con método $m \in \mathcal{M}$ [bbl/bbl].
+  \item $k_m$: costo de procesamiento con método $m \in \mathcal{M}$ [USD/bbl]. $k_1=3.4$, $k_2=3.0$, $k_3=2.6$.
+  \item $c_{f1}$: costo de cracking de grado 6 $\to$ 8 [USD/bbl]. $c_{f1} = 1.30$.
+  \item $c_{f2}$: costo de cracking de grado 8 $\to$ 10 [USD/bbl]. $c_{f2} = 2.00$.
+  \item $c_{des}$: costo de desecho de excedente [USD/bbl]. $c_{des} = 0.20$.
+  \item $p_{gas}$: precio de venta de gasolina [USD/bbl]. $p_{gas} = 8$.
+  \item $p_{oil}$: precio de venta de fuel oil [USD/bbl]. $p_{oil} = 6$.
+  \item $q_{gas}$: grado mínimo requerido de gasolina. $q_{gas} = 9$.
+  \item $q_{oil}$: grado mínimo requerido de fuel oil. $q_{oil} = 7$.
+  \item $\overline{q}_{gas}$: capacidad máxima de venta de gasolina [bbl]. $\overline{q}_{gas} = 2\,000$.
+  \item $\overline{q}_{oil}$: capacidad máxima de venta de fuel oil [bbl]. $\overline{q}_{oil} = 600$.
+\end{itemize}
 
 \medskip
-\textbf{Rendimiento por método} $r_{g,m}$:
+\textbf{Rendimiento por método} $r_{gm}$:
 \begin{center}
 \begin{tabular}{@{}lccc@{}}
 \toprule
@@ -560,28 +563,19 @@ Grado 10 & 0.6 & 0.4 & 0.2\\
 \bottomrule
 \end{tabular}
 \end{center}
-
-\medskip
-\textbf{Otros parámetros:}
-\begin{itemize}[leftmargin=1.5em]
-  \item Cracking catalítico: grado $6 \to 8$: \$1.30/bbl;\quad grado $8 \to 10$: \$2.00/bbl
-  \item Desecho de excedente: \$0.20/bbl
-  \item Gasolina: venta \$8/bbl, grado mín.\ 9, máx.\ 2\,000 bbl
-  \item Fuel oil: venta \$6/bbl, grado mín.\ 7, máx.\ 600 bbl
-\end{itemize}
 \end{parambox}
 
 \subsection{Variables de Decisión}
 
 \begin{varbox}
-\begin{align*}
-  x_m     &\geq 0,\quad m \in \cset{M}   && \text{barriles procesados por método $m$}\\
-  f_6     &\geq 0                         && \text{barriles grado 6 crackeados a grado 8}\\
-  f_8     &\geq 0                         && \text{barriles grado 8 crackeados a grado 10}\\
-  g_k     &\geq 0,\quad k \in \cset{G}   && \text{barriles grado $k$ destinados a gasolina}\\
-  o_k     &\geq 0,\quad k \in \cset{G}   && \text{barriles grado $k$ destinados a fuel oil}\\
-  d_k     &\geq 0,\quad k \in \cset{G}   && \text{barriles grado $k$ descartados}
-\end{align*}
+\begin{itemize}[leftmargin=1.5em]
+  \item $x_m \geq 0$: barriles procesados con método $m \in \mathcal{M}$.
+  \item $f_6 \geq 0$: barriles de grado 6 crackeados a grado 8.
+  \item $f_8 \geq 0$: barriles de grado 8 crackeados a grado 10.
+  \item $g_k \geq 0$: barriles de grado $k \in \mathcal{G}$ destinados a gasolina.
+  \item $o_k \geq 0$: barriles de grado $k \in \mathcal{G}$ destinados a fuel oil.
+  \item $d_k \geq 0$: barriles de grado $k \in \mathcal{G}$ descartados.
+\end{itemize}
 \end{varbox}
 
 \subsection{Función Objetivo}
@@ -746,39 +740,33 @@ display Utilidad;
 \subsection{Conjuntos}
 
 \begin{conjbox}
-\begin{align*}
-  \cset{T} &= \{1,\,2,\,3,\,4\} &&\text{trimestres del año}\\
-  \cset{S} &= \{1,\,2,\,3,\,4\} &&\text{tipos de empleado (libre en trimestre }s\text{)}
-\end{align*}
+\begin{itemize}[leftmargin=1.5em]
+  \item $\mathcal{T}$: trimestres del año $\{1, 2, 3, 4\}$.
+  \item $\mathcal{S}$: tipos de empleado (libre en trimestre $s$) $\{1, 2, 3, 4\}$.
+\end{itemize}
 \end{conjbox}
 
 \subsection{Parámetros}
 
 \begin{parambox}
-\adjustbox{max width=\linewidth, center}{%
-\renewcommand{\arraystretch}{1.3}
-\begin{tabular}{@{}clcc@{}}
-\toprule
-\textbf{Símbolo} & \textbf{Descripción} & \textbf{Valor} & \textbf{Unidad}\\
-\midrule
-$d_t$  & Demanda de licuadoras en el trimestre $t$ & $d_1=4000,\,d_2=2000,\,d_3=3000,\,d_4=10000$ & ud\\
-$\text{sal}$ & Salario anual por empleado & 30\,000 & \$/emp.\\
-$h$    & Costo unitario de inventario & 30 & \$/ud/trim.\\
-$\text{cap}$ & Producción máx.\ por empleado activo & 500 & ud/trim.\\
-$I_0$  & Inventario inicial                  & 600 & ud\\
-$\delta_{st}$ & Indicador: empleado tipo $s$ trabaja en $t$ & $\delta_{st}=1$ si $s\neq t$, 0 si $s=t$ & —\\
-\bottomrule
-\end{tabular}}
+\begin{itemize}[leftmargin=1.5em]
+  \item $d_t$: demanda de licuadoras en el trimestre $t \in \mathcal{T}$ [ud]. $d_1=4\,000$, $d_2=2\,000$, $d_3=3\,000$, $d_4=10\,000$.
+  \item $\text{sal}$: salario anual por empleado [\$/emp.]. $\text{sal} = 30\,000$.
+  \item $h$: costo unitario de inventario [\$/ud/trim.]. $h = 30$.
+  \item $\text{cap}$: producción máxima por empleado activo [ud/trim.]. $\text{cap} = 500$.
+  \item $I_0$: inventario inicial [ud]. $I_0 = 600$.
+  \item $\delta_{st}$: indicador binario; $\delta_{st} = 1$ si el empleado tipo $s \in \mathcal{S}$ trabaja en $t \in \mathcal{T}$ ($s \neq t$), 0 si $s = t$.
+\end{itemize}
 \end{parambox}
 
 \subsection{Variables de Decisión}
 
 \begin{varbox}
-\begin{align*}
-  w_s &\geq 0,\quad s \in \cset{S} &&\text{empleados con trimestre libre }s\\
-  P_t &\geq 0,\quad t \in \cset{T} &&\text{licuadoras producidas en trimestre }t\\
-  I_t &\geq 0,\quad t \in \cset{T} &&\text{inventario al final del trimestre }t
-\end{align*}
+\begin{itemize}[leftmargin=1.5em]
+  \item $w_s \geq 0$: número de empleados con trimestre libre $s \in \mathcal{S}$.
+  \item $P_t \geq 0$: licuadoras producidas en el trimestre $t \in \mathcal{T}$.
+  \item $I_t \geq 0$: inventario al final del trimestre $t \in \mathcal{T}$.
+\end{itemize}
 \end{varbox}
 
 \subsection{Función Objetivo}
@@ -942,31 +930,22 @@ display Costo;
 \subsection{Conjuntos}
 
 \begin{conjbox}
-\begin{align*}
-  \cset{T} &= \{d,\,n\} &&\text{tipo de llamada (diurna, nocturna)}\\
-  \cset{G} &= \{\text{ES},\,\text{EO},\,\text{VS},\,\text{MS}\}
-            &&\text{grupos: esposa, esposo, varón soltero, mujer soltera}
-\end{align*}
+\begin{itemize}[leftmargin=1.5em]
+  \item $\mathcal{T}$: tipos de llamada $\{d, n\}$ (diurna, nocturna).
+  \item $\mathcal{G}$: grupos objetivo $\{\text{ES}, \text{EO}, \text{VS}, \text{MS}\}$ (esposa, esposo, varón soltero, mujer soltera).
+\end{itemize}
 \end{conjbox}
 
 \subsection{Parámetros}
 
 \begin{parambox}
-\adjustbox{max width=\linewidth, center}{%
-\renewcommand{\arraystretch}{1.3}
-\begin{tabular}{@{}clcc@{}}
-\toprule
-\textbf{Símbolo} & \textbf{Descripción} & \textbf{Valor} & \textbf{Unidad}\\
-\midrule
-$c_t$      & Costo por llamada tipo $t$   & $c_d=2,\;c_n=5$ & \$/llamada\\
-$\alpha_{gt}$ & Fracción de llamadas tipo $t$ que alcanzan al grupo $g$ &
-  ver tabla & —\\
-$D_g$      & Detecciones mínimas del grupo $g$ &
-  $D_{ES}=150,\;D_{EO}=120,\;D_{VS}=100,\;D_{MS}=110$ & personas\\
-\bottomrule
-\end{tabular}}
+\begin{itemize}[leftmargin=1.5em]
+  \item $c_t$: costo por llamada de tipo $t \in \mathcal{T}$ [\$/llamada]. $c_d = 2$, $c_n = 5$.
+  \item $\alpha_{gt}$: fracción de llamadas tipo $t \in \mathcal{T}$ que alcanzan al grupo $g \in \mathcal{G}$.
+  \item $D_g$: detecciones mínimas requeridas del grupo $g \in \mathcal{G}$ [personas]. $D_{ES}=150$, $D_{EO}=120$, $D_{VS}=100$, $D_{MS}=110$.
+\end{itemize}
 
-\par\medskip
+\medskip
 \textbf{Fracciones $\alpha_{gt}$:}\par\smallskip
 \adjustbox{max width=\linewidth}{%
 \renewcommand{\arraystretch}{1.3}%
@@ -985,10 +964,9 @@ Mujer soltera (MS) & 0.10 & 0.20\\
 \subsection{Variables de Decisión}
 
 \begin{varbox}
-\[
-  x_t \;\geq 0, \quad t \in \cset{T}
-\]
-$x_t$ representa el número de llamadas de tipo $t$ realizadas.
+\begin{itemize}[leftmargin=1.5em]
+  \item $x_t \geq 0$: número de llamadas de tipo $t \in \mathcal{T}$ realizadas.
+\end{itemize}
 \end{varbox}
 
 \subsection{Función Objetivo}
@@ -1143,42 +1121,31 @@ display Costo;
 \subsection{Conjuntos}
 
 \begin{conjbox}
-\[
-  \cset{F} = \{1,\,2,\,T\}
-  \quad\text{fuentes de madera: grado 1, grado 2 y troncos propios}
-\]
+\begin{itemize}[leftmargin=1.5em]
+  \item $\mathcal{F}$: fuentes de madera $\{1, 2, T\}$ (grado 1, grado 2, troncos propios).
+\end{itemize}
 \end{conjbox}
 
 \subsection{Parámetros}
 
 \begin{parambox}
-\adjustbox{max width=\linewidth, center}{%
-\renewcommand{\arraystretch}{1.3}
-\begin{tabular}{@{}clcccc@{}}
-\toprule
-\textbf{Símbolo} & \textbf{Descripción} & \textbf{Grado 1} & \textbf{Grado 2} & \textbf{Troncos} & \textbf{Unidad}\\
-\midrule
-$c_f$       & Costo total por pie$^3$ de entrada & 7 & 11 & 9.5 & \$/pie$^3$\\
-$r_f$       & Rendimiento de madera útil          & 0.70 & 0.90 & 0.80 & pie$^3$/pie$^3$\\
-$\tau_f$    & Tiempo de secado por pie$^3$        & 1.2 & 0.8 & 1.3 & s/pie$^3$\\
-$\sigma_f$  & Capacidad de oferta                 & 40\,000 & 60\,000 & 35\,000 & pie$^3$/sem.\\
-\midrule
-$D$    & Demanda semanal de tablones útiles & \multicolumn{3}{c}{90\,000} & pie$^3$/sem.\\
-$T_{\max}$ & Tiempo de secado disponible    & \multicolumn{3}{c}{144\,000} & s/sem.\\
-\bottomrule
-\end{tabular}}
-
-\smallskip
-\textit{Nota: $c_T = 2.5\text{ (flete)} + 3\text{ (corte)} + 4\text{ (secado)} = 9.5$ \$/pie$^3$}
+\begin{itemize}[leftmargin=1.5em]
+  \item $c_f$: costo total por pie$^3$ de entrada de fuente $f \in \mathcal{F}$ [\$/pie$^3$]. $c_1=7$, $c_2=11$, $c_T=9.5$.
+  \item $r_f$: rendimiento de madera útil de fuente $f \in \mathcal{F}$ [pie$^3$/pie$^3$]. $r_1=0.70$, $r_2=0.90$, $r_T=0.80$.
+  \item $\tau_f$: tiempo de secado por pie$^3$ de fuente $f \in \mathcal{F}$ [s/pie$^3$]. $\tau_1=1.2$, $\tau_2=0.8$, $\tau_T=1.3$.
+  \item $\sigma_f$: capacidad de oferta de fuente $f \in \mathcal{F}$ [pie$^3$/sem.]. $\sigma_1=40\,000$, $\sigma_2=60\,000$, $\sigma_T=35\,000$.
+  \item $D$: demanda semanal de tablones útiles [pie$^3$/sem.]. $D = 90\,000$.
+  \item $T_{\max}$: tiempo de secado disponible [s/sem.]. $T_{\max} = 144\,000$.
+\end{itemize}
+\textit{Nota: $c_T = 2.5$ (flete) $+ 3$ (corte) $+ 4$ (secado) $= 9.5$ \$/pie$^3$}
 \end{parambox}
 
 \subsection{Variables de Decisión}
 
 \begin{varbox}
-\[
-  x_f \;\geq 0, \quad f \in \cset{F}
-\]
-$x_f$ representa los pies$^3$ de madera adquiridos / enviados al aserradero desde la fuente $f$.
+\begin{itemize}[leftmargin=1.5em]
+  \item $x_f \geq 0$: pies$^3$ de madera adquiridos / enviados al aserradero desde la fuente $f \in \mathcal{F}$.
+\end{itemize}
 \end{varbox}
 
 \subsection{Función Objetivo}
@@ -1334,49 +1301,44 @@ display Costo;
 \subsection{Conjuntos}
 
 \begin{conjbox}
-\begin{align*}
-  \cset{M} &= \{A,\,B\} &&\text{tipos de chatarra}\\
-  \cset{C} &= \{\text{Al},\,\text{Si},\,\text{Ca}\} &&\text{componentes de la aleación (aluminio, silicio, carbón)}
-\end{align*}
+\begin{itemize}[leftmargin=1.5em]
+  \item $\mathcal{M}$: tipos de chatarra $\{A, B\}$.
+  \item $\mathcal{C}$: componentes de la aleación $\{\text{Al}, \text{Si}, \text{Ca}\}$ (aluminio, silicio, carbón).
+\end{itemize}
 \end{conjbox}
 
 \subsection{Parámetros}
 
 \begin{parambox}
-\adjustbox{max width=\linewidth, center}{%
-\renewcommand{\arraystretch}{1.3}
-\begin{tabular}{@{}clcc@{}}
-\toprule
-\textbf{Símbolo} & \textbf{Descripción} & \textbf{Chatarra A} & \textbf{Chatarra B}\\
-\midrule
-$c_m$         & Costo por tonelada [\$/t]    & 100 & 80\\
-$a_{\text{Al},m}$ & Fracción de aluminio     & 0.06 & 0.03\\
-$a_{\text{Si},m}$ & Fracción de silicio      & 0.03 & 0.06\\
-$a_{\text{Ca},m}$ & Fracción de carbón       & 0.04 & 0.03\\
-\midrule
-\multicolumn{4}{@{}l}{$Q = 1\,000$ t: producción total requerida}\\
-\end{tabular}
-\medskip
+\begin{itemize}[leftmargin=1.5em]
+  \item $c_m$: costo por tonelada de chatarra $m \in \mathcal{M}$ [\$/t]. $c_A=100$, $c_B=80$.
+  \item $a_{km}$: fracción del componente $k \in \mathcal{C}$ en la chatarra $m \in \mathcal{M}$.
+  \item $\underline{q}_k$: contenido mínimo del componente $k \in \mathcal{C}$ en la aleación [t].
+  \item $\overline{q}_k$: contenido máximo del componente $k \in \mathcal{C}$ en la aleación [t].
+  \item $Q$: producción total de aleación requerida [t]. $Q = 1\,000$.
+\end{itemize}
 
-\textbf{Límites de composición:}
-\begin{tabular}{@{}lccc@{}}
+\medskip
+\begin{center}
+\renewcommand{\arraystretch}{1.3}
+\begin{tabular}{@{}lcccc@{}}
 \toprule
-\textbf{Componente $k$} & \textbf{Mín (\%)} & \textbf{Máx (\%)} & $\underline{q}_k / \overline{q}_k$ (en t)\\
+\textbf{Componente $k$} & $a_{k,A}$ & $a_{k,B}$ & $\underline{q}_k$ (t) & $\overline{q}_k$ (t)\\
 \midrule
-Aluminio (Al) & 3 & 6 & 30 / 60\\
-Silicio  (Si) & 3 & 5 & 30 / 50\\
-Carbón   (Ca) & 3 & 7 & 30 / 70\\
+Aluminio (Al) & 0.06 & 0.03 & 30 & 60\\
+Silicio  (Si) & 0.03 & 0.06 & 30 & 50\\
+Carbón   (Ca) & 0.04 & 0.03 & 30 & 70\\
 \bottomrule
-\end{tabular}}
+\end{tabular}
+\end{center}
 \end{parambox}
 
 \subsection{Variables de Decisión}
 
 \begin{varbox}
-\[
-  x_m \;\geq 0, \quad m \in \cset{M}
-\]
-$x_m$ representa las toneladas de chatarra $m$ utilizadas en la mezcla.
+\begin{itemize}[leftmargin=1.5em]
+  \item $x_m \geq 0$: toneladas de chatarra $m \in \mathcal{M}$ utilizadas en la mezcla.
+\end{itemize}
 \end{varbox}
 
 \subsection{Función Objetivo}
